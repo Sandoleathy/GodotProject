@@ -389,11 +389,10 @@ script = ExtResource("1_fvtld")
 [node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=795580180]
 material = SubResource("ShaderMaterial_xwcet")
 sprite_frames = SubResource("SpriteFrames_3aokr")
-animation = &"death"
+animation = &"normal_left"
 autoplay = "normal_right"
 
 [node name="ArmedEffectSprite" type="AnimatedSprite2D" parent="." unique_id=1834743313]
-visible = false
 sprite_frames = SubResource("SpriteFrames_gje4g")
 frame = 6
 frame_progress = 0.44444326

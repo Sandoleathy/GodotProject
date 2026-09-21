@@ -1,6 +1,12 @@
 extends CharacterBody2D
 class_name Player
 
+# 操控方式： 键鼠、手柄
+enum CONTROL_TYPE {
+	MOUSE,
+	CONTROLLER
+}
+
 const NORMAL_ANIMATION_PREFIX := &"normal"
 
 const BULLET_SCENE := preload("res://scene/bullet.tscn")
@@ -33,6 +39,8 @@ var speed_buff_time_left: float = 0.0
 var rapid_buff_time_left: float = 0.0
 var form_buff_time_left: float = 0.0
 var spiral_phase :float = 0.0
+# 操控方式
+var control_mode = CONTROL_TYPE.MOUSE
 
 @export var move_speed: float = 120.0
 @export var max_health: int = 5
@@ -63,7 +71,12 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	var move_input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var shoot_input := Input.get_vector("shoot_left", "shoot_right", "shoot_up", "shoot_down")
+	
+	# 瞄准输入
+	var aim_input := _get_aim_direction()
+	# 接收是否射击
+	var is_shooting := Input.is_action_pressed("shooting")
+	
 	var is_moving := move_input != Vector2.ZERO
 	
 	velocity = move_input * _get_effective_move_speed()
@@ -72,13 +85,22 @@ func _physics_process(delta: float) -> void:
 	
 	if current_shot_pattern == PickupConfig.ShotPattern.SPIRAL:
 		_try_auto_spiral_shoot()
-	elif shoot_input != Vector2.ZERO:
-		_try_shoot(shoot_input)
+	# 需要判别，只有当射击按键按下时，尝试射击
+	elif is_shooting:
+		_try_shoot(aim_input)
 	
-	_update_facing(move_input, shoot_input)
+	_update_facing(move_input, aim_input, is_shooting)
 	_update_animation()
 	_update_armed_effect()
-	
+
+func _get_aim_direction() -> Vector2:
+	if control_mode == CONTROL_TYPE.MOUSE:
+		var mouse_position := get_global_mouse_position()
+		var aim_direction := global_position.direction_to(mouse_position)
+		return aim_direction
+	# 手柄操控模式
+	return Input.get_vector("shoot_left", "shoot_right", "shoot_up", "shoot_down")
+
 func _update_animation() -> void:
 	var animation_name := StringName("%s_%s" % [_get_animation_prefix(), facing_suffix])
 	
@@ -93,13 +115,13 @@ func _update_animation() -> void:
 	if body_sprite.animation != animation_name:
 		body_sprite.play(animation_name)
 
-func _update_facing(move_input: Vector2, shoot_input: Vector2) -> void:
+func _update_facing(move_input: Vector2, shoot_input: Vector2, is_shooting: bool) -> void:
 	if current_shot_pattern == PickupConfig.ShotPattern.SPIRAL:
 		if move_input != Vector2.ZERO:
 			facing_suffix = _vector_to_facing_suffix(move_input)
 		return
 	
-	if shoot_input != Vector2.ZERO:
+	if shoot_input != Vector2.ZERO and is_shooting:
 		facing_suffix = _vector_to_facing_suffix(shoot_input)
 	elif move_input != Vector2.ZERO:
 		facing_suffix = _vector_to_facing_suffix(move_input)
