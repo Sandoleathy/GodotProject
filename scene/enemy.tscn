@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://dib1hr14pf7os"]
+
+[ext_resource type="Script" uid="uid://cbgck23hfyt2k" path="res://scene/enemy.gd" id="1_f87vc"]
+[ext_resource type="Shader" uid="uid://nebf434rn0vo" path="res://scene/blink.gdshader" id="1_h08p8"]
+[ext_resource type="AudioStream" uid="uid://bnkdqnxa6mfg8" path="res://resources/audio/cowboy_monsterdie.wav" id="3_yvcfn"]
+[ext_resource type="AudioStream" uid="uid://cpsll12rd358" path="res://resources/audio/cowboy_monsterhit.wav" id="4_ulb22"]
+[ext_resource type="AudioStream" uid="uid://c5yr3s7kj0j4j" path="res://resources/audio/cowboy_explosion.wav" id="5_1e552"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rarsn"]
+resource_local_to_scene = true
+shader = ExtResource("1_h08p8")
+shader_parameter/blink_enable = false
+shader_parameter/blink_speed = 12.0
+shader_parameter/hidden_ratio = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3aokr"]
+resource_local_to_scene = true
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gje4g"]
+resource_local_to_scene = true
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wmnyc"]
+resource_local_to_scene = true
+radius = 8.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=445721146]
+collision_layer = 4
+script = ExtResource("1_f87vc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=190841975]
+material = SubResource("ShaderMaterial_rarsn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1736973419]
+shape = SubResource("CircleShape2D_3aokr")
+
+[node name="TouchDamageArea" type="Area2D" parent="." unique_id=1802366540]
+collision_layer = 8
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamageArea" unique_id=151140580]
+shape = SubResource("CircleShape2D_gje4g")
+
+[node name="ExplosionDamageArea" type="Area2D" parent="." unique_id=2118226181]
+collision_layer = 64
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionDamageArea" unique_id=904870571]
+shape = SubResource("CircleShape2D_wmnyc")
+debug_color = Color(0.9945732, 0, 0.2272825, 0.41960785)
+
+[node name="AudioContainer" type="Node" parent="." unique_id=1373012824]
+
+[node name="DieSfxAudio" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1065800047]
+stream = ExtResource("3_yvcfn")
+
+[node name="HitSfxAudio" type="AudioStreamPlayer" parent="AudioContainer" unique_id=282697634]
+stream = ExtResource("4_ulb22")
+
+[node name="ExplodeSfxAudio" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1859454622]
+stream = ExtResource("5_1e552")
