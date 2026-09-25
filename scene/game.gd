@@ -9,12 +9,6 @@ const RESULT_OK_BUTTON_TEXT := "结束游戏"
 
 @export_group("刷怪资源")
 @export var enemy_scene: PackedScene = preload("res://scene/enemy.tscn")
-@export var enemy_configs:Array[EnemyConfig] = [
-	preload("res://resources/config/enemy_basic.tres"),
-	preload("res://resources/config/enemy_bomber.tres"),
-	preload("res://resources/config/enemy_fast.tres"),
-	preload("res://resources/config/enemy_shelled.tres")
-]
 
 @export_group("刷怪节奏")
 @export_range(0, 100, 1, "or_greater") var initial_spawn_count: int = 1
@@ -47,7 +41,7 @@ var time_bar_full_scale_x: float = 1.0
 var time_bar_left_edge_x: float = 1.0
 var time_bar_texture_width: float = 0.0
 var is_result_displayed: bool = false
-var enemy_global_spawner: Array[EnemySpawner] = []
+var enemy_spawners: Array[EnemySpawner] = []
 
 func _ready() -> void:
 	random_generator.randomize()
@@ -173,15 +167,15 @@ func _get_player_current_health() -> int:
 	return player.get_current_health()
 
 func _collect_enemy_spwaners() -> void:
-	enemy_global_spawner.clear()
+	enemy_spawners.clear()
 	
 	for child in enemy_spawn_points_root.get_children():
 		var spawner := child as EnemySpawner
 		if spawner != null:
 			# 挂载信号响应函数
 			spawner.enemy_spawned_signal.connect(_on_enemy_spawn)
-			if spawner.spawn_type == EnemySpawner.SPAWN_TYPE.NORMAL:
-				enemy_global_spawner.append(spawner)
+			# 加入生成器数组中
+			enemy_spawners.append(spawner)
 
 func _on_enemy_spawn(enemy_config: EnemyConfig, pos: Vector2) -> void:
 	if enemy_config == null:
@@ -270,16 +264,25 @@ func _is_spawn_system_ready() -> bool:
 	return (
 		player != null
 		and enemy_scene != null
-		and not enemy_global_spawner.is_empty()
+		and not enemy_spawners.is_empty()
 	)
 
 # 随机选择一个全局生成点
 func _pick_global_spawner() -> EnemySpawner:
-	if enemy_global_spawner.is_empty():
+	if enemy_spawners.is_empty():
+		return null
+	var enemy_global_spawners :Array[EnemySpawner] = []
+	
+	# 从所有spawner中找出全局spawner
+	for spawner in enemy_spawners:
+		if spawner.spawn_type == EnemySpawner.SPAWN_TYPE.NORMAL:
+			enemy_global_spawners.append(spawner)
+	if enemy_global_spawners.is_empty():
+		push_warning("没有全局生成点!")
 		return null
 	
-	var random_index := random_generator.randi_range(0, enemy_global_spawner.size() - 1)
-	return enemy_global_spawner[random_index]
+	var random_index := random_generator.randi_range(0, enemy_global_spawners.size() - 1)
+	return enemy_global_spawners[random_index]
 	
 	
 func _get_alive_enemy_count() -> int:

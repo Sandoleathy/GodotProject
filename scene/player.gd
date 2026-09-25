@@ -43,7 +43,7 @@ var spiral_phase :float = 0.0
 var control_mode = CONTROL_TYPE.MOUSE
 
 @export var move_speed: float = 120.0
-@export var max_health: int = 5
+@export var max_health: int = 100
 @export var invicibility_duration: float = 1.0
 
 var current_health: int = 0

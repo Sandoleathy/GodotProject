@@ -5,6 +5,7 @@ const WORLD_COLLISION_MASK := 1
 
 @export var speed: float = 320.0
 @export var max_lifetime: float = 2.0
+@export_range(1, 10, 1, "or_greater") var bullet_damage = 10
 
 var direction: Vector2 = Vector2.RIGHT
 var remaining_lifetime: float = 0.0
