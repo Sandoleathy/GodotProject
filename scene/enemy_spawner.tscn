@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dv4n2o32hne8p"]
+
+[ext_resource type="Script" uid="uid://b37n0pfy0ej3g" path="res://scene/enemy_spawner.gd" id="1_hgipb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gje4g"]
+radius = 15.0
+
+[node name="EnemySpawner" type="Node2D" unique_id=1712208861]
+script = ExtResource("1_hgipb")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=551018654]
+
+[node name="DetectRange" type="Area2D" parent="." unique_id=278960654]
+collision_layer = 128
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRange" unique_id=162909824]
+shape = SubResource("CircleShape2D_gje4g")
+debug_color = Color(0.6268377, 0.53166586, 0, 0.41960785)
+
+[node name="Timer" type="Timer" parent="." unique_id=310823479]
