@@ -33,6 +33,7 @@ script = ExtResource("1_f87vc")
 material = SubResource("ShaderMaterial_rarsn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1736973419]
+visible = false
 shape = SubResource("CircleShape2D_3aokr")
 
 [node name="TouchDamageArea" type="Area2D" parent="." unique_id=1802366540]

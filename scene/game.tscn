@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bo7s844lifke2" path="res://resources/texture/动态瓦片.png" id="2_xwcet"]
 [ext_resource type="PackedScene" uid="uid://cg0tpxbelpytl" path="res://scene/player.tscn" id="3_p1ry8"]
 [ext_resource type="FontFile" uid="uid://unlk3ambeim8" path="res://resources/font/IPix.ttf" id="5_xlg7c"]
+[ext_resource type="PackedScene" uid="uid://dv4n2o32hne8p" path="res://scene/enemy_spawner.tscn" id="5_yq8tf"]
 [ext_resource type="Texture2D" uid="uid://cubenwmufb4ni" path="res://resources/texture/道具ui.png" id="6_qpk70"]
 [ext_resource type="AudioStream" uid="uid://b3ghnwwct7kkp" path="res://resources/audio/Cowboy_Secret.wav" id="7_17rxn"]
 [ext_resource type="AudioStream" uid="uid://bxapigdgxtboe" path="res://resources/audio/1-27 Journey of the Prairie King (Overworld).mp3" id="7_yq8tf"]
@@ -137,14 +138,8 @@ position = Vector2(180, 52)
 
 [node name="EnemySpawnPoints" type="Node2D" parent="." unique_id=1530318903]
 
-[node name="SpawnLeft" type="Marker2D" parent="EnemySpawnPoints" unique_id=30613063]
+[node name="EnemySpawner" parent="EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
 position = Vector2(8, 128)
-
-[node name="SpawnRight" type="Marker2D" parent="EnemySpawnPoints" unique_id=531185483]
-position = Vector2(248, 128)
-
-[node name="SpwanBottom" type="Marker2D" parent="EnemySpawnPoints" unique_id=1472788741]
-position = Vector2(144, 232)
 
 [node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1531222781]
 
@@ -173,16 +168,16 @@ shape = SubResource("SegmentShape2D_rarsn")
 [node name="HUDLayer" type="Node2D" parent="." unique_id=1950989580]
 
 [node name="LifeIcon" type="Sprite2D" parent="HUDLayer" unique_id=163287807]
-position = Vector2(-47, 0)
+position = Vector2(-56, 0)
 texture = SubResource("CompressedTexture2D_ll5lq")
 region_enabled = true
 region_rect = Rect2(0, 18, 16, 11)
 
 [node name="LifeCountLabel" type="Label" parent="HUDLayer" unique_id=1706064247]
-offset_left = -35.0
-offset_top = -9.0
-offset_right = 5.0
-offset_bottom = 14.0
+offset_left = -48.0
+offset_top = -8.0
+offset_right = -13.0
+offset_bottom = 15.0
 theme_override_fonts/font = ExtResource("5_xlg7c")
 text = "x 5"
 

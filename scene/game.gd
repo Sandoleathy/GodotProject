@@ -48,6 +48,7 @@ var time_bar_full_scale_x: float = 1.0
 var time_bar_left_edge_x: float = 1.0
 var time_bar_texture_width: float = 0.0
 var is_result_displayed: bool = false
+var enemy_global_spawner: Array[EnemySpawner] = []
 
 func _ready() -> void:
 	random_generator.randomize()
@@ -55,7 +56,9 @@ func _ready() -> void:
 	_configure_result_dialog()
 	_setup_hud()
 	
-	_collect_enemy_spwan_points()
+	# 获取全部刷怪点
+	_collect_enemy_spwaners()
+	# 可能不再需要了，spawner会自己选择
 	_collect_enemy_configs()
 	_configure_enemy_spwan_timer()
 	_spawn_initial_enemies()
@@ -172,17 +175,23 @@ func _on_result_dialog_exit_requested() -> void:
 func _get_player_current_health() -> int:
 	return player.get_current_health()
 
-func _collect_enemy_spwan_points() -> void:
-	enemy_spawn_points.clear()
+func _collect_enemy_spwaners() -> void:
+	enemy_global_spawner.clear()
 	
 	for child in enemy_spawn_points_root.get_children():
-		var spawn_point := child as Marker2D
-		if spawn_point != null:
-			enemy_spawn_points.append(spawn_point)
+		var spawner := child as EnemySpawner
+		if spawner != null:
+			# 挂载信号响应函数
+			spawner.enemy_spawned_signal.connect(_on_enemy_spawn)
+			if spawner.spawn_type == EnemySpawner.SPAWN_TYPE.NORMAL:
+				enemy_global_spawner.append(spawner)
+
+func _on_enemy_spawn(enemy_config: EnemyConfig, pos: Vector2) -> void:
+	if enemy_config == null:
+		return
+	if _try_spawn_enemy(enemy_config, pos):
+		return
 		
-	if enemy_spawn_points.is_empty():
-		push_warning("没有可用的怪物生成点")
-			
 func _collect_enemy_configs() -> void:
 	available_enemy_configs.clear()
 	
@@ -226,8 +235,10 @@ func _get_current_spawn_interval() -> float:
 	
 func _spawn_initial_enemies() -> void:
 	for _spawn_index in range(initial_spawn_count):
-		if not _try_spawn_enemy():
-			break
+		var spawner := _pick_global_spawner()
+		if spawner == null:
+			return
+		spawner.spawn_enemy(1)
 			
 func _start_enemy_spawn_timer() -> void:
 	if not _is_spawn_system_ready():
@@ -237,30 +248,32 @@ func _start_enemy_spawn_timer() -> void:
 	
 func _on_enemy_spawn_timer_timeout() -> void:
 	for _spawn_index in range(spawn_count_per_tick):
-		if not _try_spawn_enemy():
-			break
+		var spawner := _pick_global_spawner()
+		if spawner == null:
+			push_warning("没有全局可用敌人生成点")
+			return
+		spawner.spawn_enemy(1)
 
-func _try_spawn_enemy() -> bool:
+func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> bool:
 	if not _is_spawn_system_ready():
 		return false
 	if _get_alive_enemy_count() >= max_alive_enemies:
 		return false
 		
-	var spawn_point := _pick_spawn_point()
-	if spawn_point == null:
+	if spawn_position == null:
 		return false
 	
-	var enemy_config := _pick_enemy_config()
 	if enemy_config == null:
 		return false
 	
 	var enemy_instance := enemy_scene.instantiate() as Enemy
 	if enemy_instance == null:
-		push_warning("怪物实例化失败")
+		push_warning("敌人实例化失败")
 		return false
 	
 	enemy_container.add_child(enemy_instance)
-	enemy_instance.global_position = spawn_point.global_position
+	enemy_instance.global_position = spawn_position
+	# 锁定player
 	enemy_instance.setup(enemy_config, player)
 	
 	return true
@@ -269,16 +282,16 @@ func _is_spawn_system_ready() -> bool:
 	return (
 		player != null
 		and enemy_scene != null
-		and not enemy_spawn_points.is_empty()
-		and not available_enemy_configs.is_empty()
+		and not enemy_global_spawner.is_empty()
 	)
 
-func _pick_spawn_point() -> Marker2D:
-	if enemy_spawn_points.is_empty():
+# 随机选择一个全局生成点
+func _pick_global_spawner() -> EnemySpawner:
+	if enemy_global_spawner.is_empty():
 		return null
 	
-	var random_index := random_generator.randi_range(0, enemy_spawn_points.size() - 1)
-	return enemy_spawn_points[random_index]
+	var random_index := random_generator.randi_range(0, enemy_global_spawner.size() - 1)
+	return enemy_global_spawner[random_index]
 	
 func _pick_enemy_config() -> EnemyConfig:
 	if available_enemy_configs.is_empty():
