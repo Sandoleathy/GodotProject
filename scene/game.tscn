@@ -138,8 +138,14 @@ position = Vector2(180, 52)
 
 [node name="EnemySpawnPoints" type="Node2D" parent="." unique_id=1530318903]
 
-[node name="EnemySpawner" parent="EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
+[node name="SpanwerLeft" parent="EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
 position = Vector2(8, 128)
+
+[node name="SpawnerRight" parent="EnemySpawnPoints" unique_id=940322042 instance=ExtResource("5_yq8tf")]
+position = Vector2(248, 128)
+
+[node name="SpawnerBottom" parent="EnemySpawnPoints" unique_id=1854332273 instance=ExtResource("5_yq8tf")]
+position = Vector2(144, 232)
 
 [node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1531222781]
 

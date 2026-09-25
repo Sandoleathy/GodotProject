@@ -41,8 +41,7 @@ const RESULT_OK_BUTTON_TEXT := "结束游戏"
 @onready var result_lose_sfx_player: AudioStreamPlayer = $AudioContainer/ResultLoseSfxPlayer
 
 var random_generator: RandomNumberGenerator = RandomNumberGenerator.new()
-var enemy_spawn_points: Array[Marker2D] = []
-var available_enemy_configs: Array[EnemyConfig] = []
+
 var stage_time_left: float = 0.0
 var time_bar_full_scale_x: float = 1.0
 var time_bar_left_edge_x: float = 1.0
@@ -58,8 +57,6 @@ func _ready() -> void:
 	
 	# 获取全部刷怪点
 	_collect_enemy_spwaners()
-	# 可能不再需要了，spawner会自己选择
-	_collect_enemy_configs()
 	_configure_enemy_spwan_timer()
 	_spawn_initial_enemies()
 	_start_enemy_spawn_timer()
@@ -192,15 +189,6 @@ func _on_enemy_spawn(enemy_config: EnemyConfig, pos: Vector2) -> void:
 	if _try_spawn_enemy(enemy_config, pos):
 		return
 		
-func _collect_enemy_configs() -> void:
-	available_enemy_configs.clear()
-	
-	for enemy_config in enemy_configs:
-		if enemy_config != null:
-			available_enemy_configs.append(enemy_config)
-		
-	if available_enemy_configs.is_empty():
-		push_warning("没有可用的怪物config")
 
 func _configure_enemy_spwan_timer() -> void:
 	enemy_spawn_timer.one_shot = false
@@ -243,7 +231,6 @@ func _spawn_initial_enemies() -> void:
 func _start_enemy_spawn_timer() -> void:
 	if not _is_spawn_system_ready():
 		return
-	
 	enemy_spawn_timer.start()
 	
 func _on_enemy_spawn_timer_timeout() -> void:
@@ -277,7 +264,8 @@ func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> boo
 	enemy_instance.setup(enemy_config, player)
 	
 	return true
-	
+
+# 修改生成系统和敌人系统时注意修改！
 func _is_spawn_system_ready() -> bool:
 	return (
 		player != null
@@ -293,12 +281,6 @@ func _pick_global_spawner() -> EnemySpawner:
 	var random_index := random_generator.randi_range(0, enemy_global_spawner.size() - 1)
 	return enemy_global_spawner[random_index]
 	
-func _pick_enemy_config() -> EnemyConfig:
-	if available_enemy_configs.is_empty():
-		return null
-		
-	var random_index := random_generator.randi_range(0, available_enemy_configs.size() - 1)
-	return available_enemy_configs[random_index]
 	
 func _get_alive_enemy_count() -> int:
 	var alive_enemy_count := 0

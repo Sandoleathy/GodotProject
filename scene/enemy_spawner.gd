@@ -38,7 +38,7 @@ signal enemy_spawned_signal(enemy: EnemyConfig, spawn_position: Vector2)
 @onready var spawn_point: Marker2D = $SpawnPoint
 @onready var detect_range: Area2D = $DetectRange
 @onready var detect_collision_shape: CollisionShape2D = $DetectRange/CollisionShape2D
-@onready var enemt_spawn_timer: Timer = $Timer
+@onready var enemy_spawn_timer: Timer = $Timer
 
 func spawn_enemy(number: int = 1) -> void:
 	for i in range(number):
@@ -79,21 +79,28 @@ func _emit_game_to_spawn_enemy() -> void:
 
 func _update_spawn_interval() -> void:
 	var current_interval := _get_current_spawn_interval()
-	if is_equal_approx(enemt_spawn_timer.wait_time, current_interval):
+	if is_equal_approx(enemy_spawn_timer.wait_time, current_interval):
 		return
 	
-	enemt_spawn_timer.wait_time = current_interval
+	enemy_spawn_timer.wait_time = current_interval
 	
-	if enemt_spawn_timer.is_stopped():
+	if enemy_spawn_timer.is_stopped():
 		return
-	if enemt_spawn_timer.time_left <= current_interval:
+	if enemy_spawn_timer.time_left <= current_interval:
 		return
 	
-	enemt_spawn_timer.start(current_interval)
+	enemy_spawn_timer.start(current_interval)
 	
 func _get_current_spawn_interval() -> float:
 	return spawn_interval
 	
 func _init_enemy_spawn_timer() -> void:
-	enemt_spawn_timer.one_shot = false
-	enemt_spawn_timer.wait_time = _get_current_spawn_interval()
+	enemy_spawn_timer.one_shot = false
+	enemy_spawn_timer.wait_time = _get_current_spawn_interval()
+	if enemy_spawn_timer.timeout.is_connected(_on_enemy_spawn_timer_timeout):
+		enemy_spawn_timer.timeout.connect(_on_enemy_spawn_timer_timeout)
+
+# 生成计时器到时间后生成敌人逻辑（仅适用于非NORMAL情况，否则生成敌人与否由game.gd控制）
+func _on_enemy_spawn_timer_timeout() -> void:
+	pass
+	# TODO
