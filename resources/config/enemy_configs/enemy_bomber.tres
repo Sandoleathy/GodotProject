@@ -2,16 +2,16 @@
 
 [ext_resource type="SpriteFrames" uid="uid://cu5xdr1r8sskk" path="res://resources/animation/enemy_boomber.tres" id="1_dmrur"]
 [ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_yk220"]
-[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_rapid.tres" id="2_dmrur"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_speed.tres" id="3_qmoxg"]
-[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_spiral.tres" id="4_4kq6o"]
+[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_dmrur"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_qmoxg"]
+[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_4kq6o"]
 [ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_7pxth"]
 
 [resource]
 script = ExtResource("5_7pxth")
 enemy_type = 3
 display_name = "自爆敌人"
-max_health = 2
+max_health = 60
 move_speed = 15.0
 enemy_frames = ExtResource("1_dmrur")
 explode_in_death = true

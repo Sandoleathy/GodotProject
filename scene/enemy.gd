@@ -13,7 +13,7 @@ enum DeathSequenceStage {
 }
 
 @export var config: EnemyConfig
-@export var touch_damage: int = 1
+@export var touch_damage: int = 10
 @export var touch_damage_interval: float = 0.5
 @export var hurt_blink_duration: float = 0.16
 
@@ -152,7 +152,7 @@ func _on_touch_damage_area_area_entered(area: Area2D) -> void:
 	var bullet := area as Bullet
 	if bullet == null:
 		return
-	var damaged := apply_damage(DEFAULT_BULLET_DAMAGE)
+	var damaged := apply_damage(bullet.bullet_damage)
 	if damaged:
 		bullet.queue_free()
 		

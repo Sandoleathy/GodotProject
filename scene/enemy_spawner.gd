@@ -9,10 +9,10 @@ enum SPAWN_TYPE {
 @export_group("刷怪资源")
 @export var spawn_type: SPAWN_TYPE = SPAWN_TYPE.NORMAL
 @export var enemy_configs :Array[EnemyConfig] = [
-	preload("res://resources/config/enemy_basic.tres"),
-	preload("res://resources/config/enemy_bomber.tres"),
-	preload("res://resources/config/enemy_fast.tres"),
-	preload("res://resources/config/enemy_shelled.tres")
+	preload("res://resources/config/enemy_configs/enemy_basic.tres"),
+	preload("res://resources/config/enemy_configs/enemy_bomber.tres"),
+	preload("res://resources/config/enemy_configs/enemy_fast.tres"),
+	preload("res://resources/config/enemy_configs/enemy_shelled.tres")
 ]
 
 @export_group("刷怪参数(仅当非NORMAL模式时有用)")
@@ -43,6 +43,7 @@ signal enemy_spawned_signal(enemy: EnemyConfig, spawn_position: Vector2)
 func spawn_enemy(number: int = 1) -> void:
 	for i in range(number):
 		_emit_game_to_spawn_enemy()
+		enemy_spawned_count += 1
 
 func _ready() -> void:
 	random_generator.randomize()
