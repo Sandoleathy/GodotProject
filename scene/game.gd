@@ -5,7 +5,7 @@ const RESULT_TITLE_WIN:= "你赢了"
 const RESULT_TITLE_LOSE := "你输了"
 const RESULT_MESSAGE_WIN := "你坚持到了倒计时结束"
 const RESULT_MESSAGE_LOSE := "生命值归零"
-const RESULT_OK_BUTTON_TEXT := "结束游戏"
+const RESULT_OK_BUTTON_TEXT := "返回主菜单"
 
 @export_group("刷怪资源")
 @export var enemy_scene: PackedScene = preload("res://scene/enemy.tscn")
@@ -161,7 +161,8 @@ func _play_sfx(sfx: AudioStreamPlayer) -> void:
 	sfx.play()
 
 func _on_result_dialog_exit_requested() -> void:
-	get_tree().quit()
+	# 游戏结束后回到主菜单
+	get_tree().change_scene_to_file("res://scene/main_menu.tscn")
 	
 func _get_player_current_health() -> int:
 	return player.get_current_health()

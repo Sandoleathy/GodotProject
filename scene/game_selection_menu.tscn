@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dd8xn8f4x0yj5"]
+
+[ext_resource type="Script" uid="uid://clpwt51ugn6qb" path="res://resources/scripts/menu_scripts/game_selection_menu.gd" id="1_5o0sr"]
+
+[node name="GameSelectionMenu" type="Control" unique_id=600894524]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5o0sr")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=778883734]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.67158145, 0.83305717, 0.9555834, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=29405391]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TestLevel1Button" type="Button" parent="HBoxContainer" unique_id=589635174]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "测试关卡1：关卡综合测试"
+
+[node name="TestLevel2Button" type="Button" parent="HBoxContainer" unique_id=771875883]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "测试关卡2"
