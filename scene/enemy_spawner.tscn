@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b37n0pfy0ej3g" path="res://scene/enemy_spawner.gd" id="1_hgipb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gje4g"]
+resource_local_to_scene = true
 radius = 15.0
 
 [node name="EnemySpawner" type="Node2D" unique_id=1712208861]

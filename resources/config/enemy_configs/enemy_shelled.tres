@@ -1,19 +1,21 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://br06kjvsh1sv1"]
 
-[ext_resource type="SpriteFrames" uid="uid://cggcfbucuv2y7" path="res://resources/animation/enemy_shelled.tres" id="1_7hcef"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_ax6jx"]
-[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_7hcef"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_7rafb"]
-[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_jilfn"]
-[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_jot1f"]
+[ext_resource type="SpriteFrames" uid="uid://cggcfbucuv2y7" path="res://resources/animation/enemy_shelled.tres" id="1_2esji"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_sgggm"]
+[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_2kym5"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_ypq8i"]
+[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_ild03"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="6_boi0t"]
+[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="7_snh70"]
 
 [resource]
-script = ExtResource("5_jilfn")
+script = ExtResource("7_snh70")
 enemy_type = 1
 display_name = "带壳敌人"
 max_health = 80
 move_speed = 10.0
 collision_radius = 10.0
-enemy_frames = ExtResource("1_7hcef")
+enemy_frames = ExtResource("1_2esji")
 pickup_drop_chance = 0.8
+pick_up_drop_configs = Array[ExtResource("2_sgggm")]([ExtResource("3_2kym5"), ExtResource("4_ypq8i"), ExtResource("5_ild03"), ExtResource("6_boi0t")])
 metadata/_custom_type_script = "uid://b550hu8ij2xnm"

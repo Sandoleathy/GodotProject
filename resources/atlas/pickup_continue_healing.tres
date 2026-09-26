@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://t70cli6hudww"]
+
+[ext_resource type="Texture2D" uid="uid://dcap21oeuuwu0" path="res://resources/texture/医疗道具.png" id="1_wctjc"]
+
+[resource]
+atlas = ExtResource("1_wctjc")
+region = Rect2(23, 7, 16, 16)

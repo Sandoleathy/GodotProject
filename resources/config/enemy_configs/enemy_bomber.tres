@@ -1,21 +1,24 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dw4nqkmwdvvmf"]
 
-[ext_resource type="SpriteFrames" uid="uid://cu5xdr1r8sskk" path="res://resources/animation/enemy_boomber.tres" id="1_dmrur"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_yk220"]
-[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_dmrur"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_qmoxg"]
-[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_4kq6o"]
-[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_7pxth"]
+[ext_resource type="SpriteFrames" uid="uid://cu5xdr1r8sskk" path="res://resources/animation/enemy_boomber.tres" id="1_cnub0"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_niikm"]
+[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_rad3s"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_chpyn"]
+[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_f3fcu"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="6_o543e"]
+[ext_resource type="Resource" uid="uid://dir3lb3us2d04" path="res://resources/config/pickup_configs/pickup_immediate_healing.tres" id="7_0acp4"]
+[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="8_uev0w"]
 
 [resource]
-script = ExtResource("5_7pxth")
+script = ExtResource("8_uev0w")
 enemy_type = 3
 display_name = "自爆敌人"
 max_health = 60
 move_speed = 15.0
-enemy_frames = ExtResource("1_dmrur")
+enemy_frames = ExtResource("1_cnub0")
 explode_in_death = true
 explosion_damage = 2
 explosion_radius = 30.0
 pickup_drop_chance = 0.8
+pick_up_drop_configs = Array[ExtResource("2_niikm")]([ExtResource("3_rad3s"), ExtResource("4_chpyn"), ExtResource("5_f3fcu"), ExtResource("6_o543e"), ExtResource("7_0acp4")])
 metadata/_custom_type_script = "uid://b550hu8ij2xnm"

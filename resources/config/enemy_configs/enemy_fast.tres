@@ -1,18 +1,19 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dt7s5xvotf76f"]
 
-[ext_resource type="SpriteFrames" uid="uid://2fannubs6ira" path="res://resources/animation/enemy_fast.tres" id="1_ebpf3"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_neduf"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="3_ebpf3"]
-[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_w8bw6"]
+[ext_resource type="SpriteFrames" uid="uid://2fannubs6ira" path="res://resources/animation/enemy_fast.tres" id="1_bx1s4"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_5ta1o"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="3_3ng5w"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="4_s3bos"]
+[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_iv0dy"]
 
 [resource]
-script = ExtResource("5_w8bw6")
+script = ExtResource("5_iv0dy")
 enemy_type = 2
 display_name = "快速敌人"
 max_health = 20
 move_speed = 30.0
 collision_radius = 5.0
-enemy_frames = ExtResource("1_ebpf3")
+enemy_frames = ExtResource("1_bx1s4")
 pickup_drop_chance = 0.5
-pick_up_drop_configs = Array[ExtResource("1_neduf")]([ExtResource("3_ebpf3")])
+pick_up_drop_configs = Array[ExtResource("2_5ta1o")]([ExtResource("3_3ng5w"), ExtResource("4_s3bos")])
 metadata/_custom_type_script = "uid://b550hu8ij2xnm"

@@ -26,7 +26,10 @@ const WORLD_COLLISION_MASK := 1
 @onready var shoot_sfx_player: AudioStreamPlayer = $AudioContainer/ShootSfxPlayer
 @onready var move_sfx_player: AudioStreamPlayer = $AudioContainer/MoveSfxPlayer
 @onready var pickup_sfx_player: AudioStreamPlayer = $AudioContainer/PickupSfxPlayer
-	
+@onready var continue_healing_unit:ContinueHealingUnit = $ContinueHealingUnit
+
+# 默认pickup音效
+@export var default_pickup_sfx: AudioStream = preload("res://resources/audio/cowboy_powerup.wav")
 var facing_suffix := &"right"
 
 # 移速
@@ -60,6 +63,7 @@ func _ready() -> void:
 	_set_hurt_blink_enabled(false)
 	_update_animation()
 	_update_armed_effect()
+	continue_healing_unit.setup(self)
 
 func _physics_process(delta: float) -> void:
 	_update_invincibility(delta)	
@@ -135,7 +139,8 @@ func _try_shoot(shoot_input: Vector2) -> void:
 	if has_spawned_bullet:
 		_play_sfx(shoot_sfx_player)
 	shooting_timer.start(_get_effective_fire_interval())
-	
+
+# 处理pickup
 func apply_pickup(config: PickupConfig) -> bool:
 	if config == null:
 		return false
@@ -172,12 +177,24 @@ func apply_pickup(config: PickupConfig) -> bool:
 		spiral_phase = 0.0
 		should_refresh_shooting_timer = true
 		applied = true
-		
+	
+	if config.healing_amount >= 0:
+		if config.pickup_type == PickupConfig.PickupType.IMMEDIATE_HEALING:
+			apply_healing(config.healing_amount)
+			applied = true
+		if config.pickup_type == PickupConfig.PickupType.CONTINUE_HEALING:
+			# TODO 恢复器启动
+			continue_healing_unit.set_healing_data(config.healing_amount, config.duration)
+			applied = true
+	
 	if should_refresh_shooting_timer:
 		_refresh_shooting_timer_wait_time()
 		
 	if applied:
-		_play_sfx(pickup_sfx_player)
+		var pickup_stream := config.audio_stream
+		if default_pickup_sfx == null:
+			pickup_stream = default_pickup_sfx
+		_play_sfx(pickup_sfx_player, pickup_stream)
 	return applied
 		
 
@@ -194,7 +211,15 @@ func apply_damage(amount: int) -> bool:
 		return true
 	_start_invincibility()
 	return true
-	
+
+func apply_healing(amount: int) -> bool:
+	if is_dead:
+		return false
+	if amount <= 0:
+		return false
+	current_health = mini(current_health + amount, max_health)
+	return true
+
 func get_current_health() -> int:
 	return current_health
 
@@ -370,10 +395,14 @@ func _set_move_sfx_active(active: bool) -> void:
 	if move_sfx_player.playing:
 		move_sfx_player.stop()
 		
-func _play_sfx(sfx: AudioStreamPlayer) ->void:
-	if sfx == null and sfx.stream == null:
+func _play_sfx(sfx: AudioStreamPlayer, stream: AudioStream = null) ->void:
+	if sfx == null:
 		return
 	sfx.stop()
+	if stream != null:
+		sfx.stream = stream
+	if sfx.stream == null:
+		return
 	sfx.play()
 
 func _vector_to_facing_suffix(direction: Vector2) -> StringName:

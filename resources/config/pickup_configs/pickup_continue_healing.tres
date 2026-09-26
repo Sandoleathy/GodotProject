@@ -1,9 +1,13 @@
 [gd_resource type="Resource" script_class="PickupConfig" format=3 uid="uid://dxisn5u5eatdv"]
 
 [ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_0rpjw"]
+[ext_resource type="Texture2D" uid="uid://t70cli6hudww" path="res://resources/atlas/pickup_continue_healing.tres" id="1_wvjlj"]
 
 [resource]
 script = ExtResource("1_0rpjw")
-pickup_type = 4
-pickup_name = "即时回复道具"
+pickup_type = 3
+pickup_name = "持续回复道具"
+icon_texture = ExtResource("1_wvjlj")
+duration = 10.0
+healing_amount = 20
 metadata/_custom_type_script = "uid://fv5ohxpw884h"

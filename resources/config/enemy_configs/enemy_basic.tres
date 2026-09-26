@@ -1,17 +1,18 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dcghpc6do6hqg"]
 
-[ext_resource type="SpriteFrames" uid="uid://dbt112nacpcj8" path="res://resources/animation/enemy_basic.tres" id="1_ca4gr"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="1_myn7r"]
-[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_myn7r"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_ca4gr"]
-[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_mboub"]
+[ext_resource type="SpriteFrames" uid="uid://dbt112nacpcj8" path="res://resources/animation/enemy_basic.tres" id="1_2x1ja"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_1jsv4"]
+[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_4fsxj"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_8hq03"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="5_pea00"]
+[ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="6_8oval"]
 
 [resource]
-script = ExtResource("5_mboub")
+script = ExtResource("6_8oval")
 max_health = 50
 move_speed = 20.0
 collision_radius = 6.0
-enemy_frames = ExtResource("1_ca4gr")
+enemy_frames = ExtResource("1_2x1ja")
 pickup_drop_chance = 0.2
-pick_up_drop_configs = Array[ExtResource("1_myn7r")]([ExtResource("3_myn7r"), ExtResource("4_ca4gr")])
+pick_up_drop_configs = Array[ExtResource("2_1jsv4")]([ExtResource("3_4fsxj"), ExtResource("4_8hq03"), ExtResource("5_pea00"), ExtResource("5_pea00")])
 metadata/_custom_type_script = "uid://b550hu8ij2xnm"

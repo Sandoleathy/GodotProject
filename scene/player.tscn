@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://ccrf08i4cpn7n" path="res://resources/audio/Cowboy_gunshot.wav" id="5_hp4bs"]
 [ext_resource type="AudioStream" uid="uid://c5ou763v6hf0" path="res://resources/audio/Cowboy_Footstep.wav" id="6_g2vtq"]
 [ext_resource type="AudioStream" uid="uid://dc4xvi5yhj331" path="res://resources/audio/cowboy_powerup.wav" id="7_2fvbb"]
+[ext_resource type="Script" uid="uid://dt1wuo7klbmmn" path="res://resources/scripts/continue_healing_unit.gd" id="8_g2vtq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xwcet"]
 resource_local_to_scene = true
@@ -412,3 +413,7 @@ stream = ExtResource("6_g2vtq")
 
 [node name="PickupSfxPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1552961179]
 stream = ExtResource("7_2fvbb")
+
+[node name="ContinueHealingUnit" type="Node" parent="." unique_id=1477231579]
+script = ExtResource("8_g2vtq")
+metadata/_custom_type_script = "uid://dt1wuo7klbmmn"
