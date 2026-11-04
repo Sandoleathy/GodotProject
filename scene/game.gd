@@ -240,7 +240,6 @@ func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> boo
 		push_warning("生成系统未就绪")
 		return false
 	if _get_alive_enemy_count() >= max_alive_enemies:
-		push_warning("敌人数量过多")
 		return false
 		
 	if spawn_position == null:

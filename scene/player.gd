@@ -192,7 +192,7 @@ func apply_pickup(config: PickupConfig) -> bool:
 		
 	if applied:
 		var pickup_stream := config.audio_stream
-		if default_pickup_sfx == null:
+		if default_pickup_sfx != null:
 			pickup_stream = default_pickup_sfx
 		_play_sfx(pickup_sfx_player, pickup_stream)
 	return applied

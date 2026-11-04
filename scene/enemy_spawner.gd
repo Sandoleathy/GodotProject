@@ -48,7 +48,7 @@ func spawn_enemy(number: int = 1) -> void:
 		number = enemy_number - enemy_spawned_count
 	for i in range(number):
 		if _emit_game_to_spawn_enemy():
-			enemy_spawned_count += number
+			enemy_spawned_count += 1
 
 func _ready() -> void:
 	random_generator.randomize()

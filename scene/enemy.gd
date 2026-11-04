@@ -206,7 +206,6 @@ func _die() -> void:
 	collision_shape.set_deferred("disabled", true)
 	touch_damage_shape.set_deferred("disabled", true)
 	touch_damage_area.set_deferred("monitoring", true)
-	touch_damage_area.set_deferred("monitoring", true)
 	_try_drop_pickup()
 	_start_death_sequence()
 
