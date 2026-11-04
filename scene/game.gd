@@ -183,7 +183,6 @@ func _on_enemy_spawn(enemy_config: EnemyConfig, pos: Vector2) -> void:
 		return
 	if _try_spawn_enemy(enemy_config, pos):
 		return
-		
 
 func _configure_enemy_spwan_timer() -> void:
 	enemy_spawn_timer.one_shot = false
@@ -238,14 +237,18 @@ func _on_enemy_spawn_timer_timeout() -> void:
 
 func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> bool:
 	if not _is_spawn_system_ready():
+		push_warning("生成系统未就绪")
 		return false
 	if _get_alive_enemy_count() >= max_alive_enemies:
+		push_warning("敌人数量过多")
 		return false
 		
 	if spawn_position == null:
+		push_warning("生成点无效")
 		return false
 	
 	if enemy_config == null:
+		push_warning("enemy config无效")
 		return false
 	
 	var enemy_instance := enemy_scene.instantiate() as Enemy
@@ -257,7 +260,6 @@ func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> boo
 	enemy_instance.global_position = spawn_position
 	# 锁定player
 	enemy_instance.setup(enemy_config, player)
-	
 	return true
 
 # 修改生成系统和敌人系统时注意修改！

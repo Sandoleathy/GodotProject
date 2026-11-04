@@ -147,6 +147,13 @@ position = Vector2(248, 128)
 [node name="SpawnerBottom" parent="EnemySpawnPoints" unique_id=1854332273 instance=ExtResource("5_yq8tf")]
 position = Vector2(144, 232)
 
+[node name="EnemySpawner" parent="EnemySpawnPoints" unique_id=420135124 instance=ExtResource("5_yq8tf")]
+position = Vector2(128, 32)
+spawn_type = 1
+player_detect_range = 80.0
+enemy_number = 20
+spawn_count_per_tick = 2
+
 [node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1531222781]
 
 [node name="WorldBounds" type="Node2D" parent="." unique_id=1889435109]
