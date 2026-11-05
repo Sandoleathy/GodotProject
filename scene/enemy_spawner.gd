@@ -44,7 +44,8 @@ signal enemy_spawned_signal(enemy: EnemyConfig, spawn_position: Vector2)
 @onready var enemy_spawn_timer: Timer = $Timer
 
 func spawn_enemy(number: int = 1) -> void:
-	if enemy_spawned_count + number > enemy_number:
+	# 只在非全局时判断生成敌人是否超出数量限制
+	if enemy_spawned_count + number > enemy_number and spawn_type != SPAWN_TYPE.NORMAL:
 		number = enemy_number - enemy_spawned_count
 	for i in range(number):
 		if _emit_game_to_spawn_enemy():
@@ -144,5 +145,3 @@ func _on_detect_area_exit(body: Node2D) -> void:
 		# 停止生成敌人
 		is_spawning_enemy = false	
 		# enemy_spawn_timer.paused = true
-
-	
