@@ -12,6 +12,11 @@ enum DeathSequenceStage {
 	EXPLOSION,
 }
 
+enum EnemySearchStrategy {
+	CLOEST,
+	# TODO 设计新的索敌略
+}
+
 @export var config: EnemyConfig
 @export var touch_damage: int = 10
 @export var touch_damage_interval: float = 0.5
@@ -38,6 +43,7 @@ var hurt_blink_time_left: float = 0.0
 var death_sequence_stage: DeathSequenceStage = DeathSequenceStage.NONE
 var death_animation_name_in_use: StringName = &""
 var random_generator: RandomNumberGenerator = RandomNumberGenerator.new()
+var targeting_strategy: EnemySearchStrategy = EnemySearchStrategy.CLOEST
 
 func _ready() -> void:
 	random_generator.randomize()
@@ -48,14 +54,35 @@ func _ready() -> void:
 	animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
 	_apply_config()
 	
-func setup(enemy_config: EnemyConfig, player: Player) -> void:
+# 索敌逻辑由Enemy自行决定
+# 使用索敌策略决定如何索敌
+func setup(enemy_config: EnemyConfig) -> void:
 	config = enemy_config
-	target_player = player
+	target_player = set_target_by_strategy()
 	_apply_config()
 	
 # 只单独更新追踪目标函数
-func set_target_player(player: Player) -> void:
-	target_player = player
+# 由于遍历节点树，速度慢，请勿process中调用
+func set_target_by_strategy() -> Player:
+	if targeting_strategy == EnemySearchStrategy.CLOEST:
+		# 获取所有玩家
+		var all_player: Array[Player] = []
+		all_player.assign(get_tree().current_scene.find_children("*", "Player"))
+		var closest_distance = 9223372036854775807 # max_int
+		if all_player.is_empty():
+			push_warning("[EnemyManager]: 场景中未找到任何Player!")
+			return null
+		var closest_player = null
+		for player in all_player:
+			# 查找最近的player
+			var distance = self.global_position.distance_squared_to(player.global_position)
+			if distance < closest_distance:
+				closest_distance = distance
+				closest_player = player
+		return closest_player
+	
+	push_warning("[EnemyManager]: 未指定索敌策略")
+	return null
 	
 func apply_damage(amount: int) -> bool:
 	if is_dead:

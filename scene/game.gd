@@ -7,24 +7,17 @@ const RESULT_MESSAGE_WIN := "你坚持到了倒计时结束"
 const RESULT_MESSAGE_LOSE := "生命值归零"
 const RESULT_OK_BUTTON_TEXT := "返回主菜单"
 
-@export_group("刷怪资源")
-@export var enemy_scene: PackedScene = preload("res://scene/enemy.tscn")
-
-@export_group("刷怪节奏")
-@export_range(0, 100, 1, "or_greater") var initial_spawn_count: int = 1
-@export_range(1, 20, 1, "or_greater") var spawn_count_per_tick: int = 1
-@export_range(0.1, 60.0, 0.1, "or_greater") var spawn_interval: float = 1.5
-@export_range(0.1, 60.0, 0.1, "or_greater") var min_spawn_interval: float = 0.6
-@export_range(1, 200, 1, "or_greater") var max_alive_enemies: int = 12
-
 @export_group("关卡UI")
 @export_range(1.0, 3600.0, 1.0, "or_greater") var stage_duration: float = 60.0
 
+@export_group("刷怪节奏")
+@export_range(0.1, 60.0, 0.1, "or_greater") var spawn_interval: float = 1.5
+@export_range(0.1, 60.0, 0.1, "or_greater") var min_spawn_interval: float = 0.6
 
 @onready var player: Player = $Player
-@onready var enemy_container: Node2D = $EnemyContainer
-@onready var enemy_spawn_points_root: Node2D = $EnemySpawnPoints
-@onready var enemy_spawn_timer: Timer = $EnemySpawnTimer
+@onready var enemy_container: Node2D = $EnemyManager/EnemyContainer
+@onready var enemy_spawn_points_root: Node2D = $EnemyManager/EnemySpawnPoints
+@onready var enemy_spawn_timer: Timer = $EnemyManager/EnemySpawnTimer
 
 @onready var life_count_label :Label = $HUDLayer/LifeCountLabel
 @onready var time_bar: Sprite2D = $HUDLayer/TimeBar
@@ -33,6 +26,7 @@ const RESULT_OK_BUTTON_TEXT := "返回主菜单"
 @onready var bgm_player: AudioStreamPlayer = $AudioContainer/BGMPlayer
 @onready var result_win_sfx_player: AudioStreamPlayer = $AudioContainer/ResultWinSfxPlayer
 @onready var result_lose_sfx_player: AudioStreamPlayer = $AudioContainer/ResultLoseSfxPlayer
+@onready var enemy_manager: EnemyManager = $EnemyManager
 
 var random_generator: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -48,12 +42,6 @@ func _ready() -> void:
 	
 	_configure_result_dialog()
 	_setup_hud()
-	
-	# 获取全部刷怪点
-	_collect_enemy_spwaners()
-	_configure_enemy_spwan_timer()
-	_spawn_initial_enemies()
-	_start_enemy_spawn_timer()
 	
 func _process(delta: float) -> void:
 	if is_result_displayed:
@@ -167,43 +155,28 @@ func _on_result_dialog_exit_requested() -> void:
 func _get_player_current_health() -> int:
 	return player.get_current_health()
 
-func _collect_enemy_spwaners() -> void:
-	enemy_spawners.clear()
-	
-	for child in enemy_spawn_points_root.get_children():
-		var spawner := child as EnemySpawner
-		if spawner != null:
-			# 挂载信号响应函数
-			spawner.enemy_spawned_signal.connect(_on_enemy_spawn)
-			# 加入生成器数组中
-			enemy_spawners.append(spawner)
-
-func _on_enemy_spawn(enemy_config: EnemyConfig, pos: Vector2) -> void:
-	if enemy_config == null:
-		return
-	if _try_spawn_enemy(enemy_config, pos):
-		return
-
-func _configure_enemy_spwan_timer() -> void:
-	enemy_spawn_timer.one_shot = false
-	enemy_spawn_timer.wait_time = _get_current_spawn_interval()
-	
-	if not enemy_spawn_timer.timeout.is_connected(_on_enemy_spawn_timer_timeout):
-		enemy_spawn_timer.timeout.connect(_on_enemy_spawn_timer_timeout)
-
 func _update_spawn_interval() -> void:
 	var current_interval := _get_current_spawn_interval()
-	if is_equal_approx(enemy_spawn_timer.wait_time, current_interval):
+	
+	# 当有enemy manager时也够行游戏
+	if enemy_manager == null:
 		return
 	
-	enemy_spawn_timer.wait_time = current_interval
-	
-	if enemy_spawn_timer.is_stopped():
+	# 对manager的timer否存在做安全检查
+	if enemy_manager.get_current_global_spawn_timer_wait_time() < 0:
 		return
-	if enemy_spawn_timer.time_left <= current_interval:
+		
+	if is_equal_approx(enemy_manager.get_current_global_spawn_timer_wait_time(), current_interval):
 		return
 	
-	enemy_spawn_timer.start(current_interval)
+	enemy_manager.set_global_spawn_timer_wait_time(current_interval)
+	
+	if enemy_manager.is_global_spawn_timer_stopped():
+		return
+	if enemy_manager.get_global_spawn_timer_time_left() <= enemy_manager.get_current_global_spawn_timer_wait_time():
+		return
+	
+	enemy_manager.start_global_spawn_timer(current_interval)
 	
 func _get_current_spawn_interval() -> float:
 	var start_interval := maxf(spawn_interval, 0.1)
@@ -215,83 +188,3 @@ func _get_current_spawn_interval() -> float:
 	var diffculty_ratio := 1.0 - clampf(stage_time_left / stage_duration, 0.0, 1.0)
 	return lerpf(start_interval, end_interval, diffculty_ratio)
 	
-func _spawn_initial_enemies() -> void:
-	for _spawn_index in range(initial_spawn_count):
-		var spawner := _pick_global_spawner()
-		if spawner == null:
-			return
-		spawner.spawn_enemy(1)
-			
-func _start_enemy_spawn_timer() -> void:
-	if not _is_spawn_system_ready():
-		return
-	enemy_spawn_timer.start()
-	
-func _on_enemy_spawn_timer_timeout() -> void:
-	for _spawn_index in range(spawn_count_per_tick):
-		var spawner := _pick_global_spawner()
-		if spawner == null:
-			push_warning("没有全局可用敌人生成点")
-			return
-		spawner.spawn_enemy(1)
-
-func _try_spawn_enemy(enemy_config: EnemyConfig, spawn_position: Vector2) -> bool:
-	if not _is_spawn_system_ready():
-		push_warning("生成系统未就绪")
-		return false
-	if _get_alive_enemy_count() >= max_alive_enemies:
-		return false
-		
-	if spawn_position == null:
-		push_warning("生成点无效")
-		return false
-	
-	if enemy_config == null:
-		push_warning("enemy config无效")
-		return false
-	
-	var enemy_instance := enemy_scene.instantiate() as Enemy
-	if enemy_instance == null:
-		push_warning("敌人实例化失败")
-		return false
-	
-	enemy_container.add_child(enemy_instance)
-	enemy_instance.global_position = spawn_position
-	# 锁定player
-	enemy_instance.setup(enemy_config, player)
-	return true
-
-# 修改生成系统和敌人系统时注意修改！
-func _is_spawn_system_ready() -> bool:
-	return (
-		player != null
-		and enemy_scene != null
-		and not enemy_spawners.is_empty()
-	)
-
-# 随机选择一个全局生成点
-func _pick_global_spawner() -> EnemySpawner:
-	if enemy_spawners.is_empty():
-		return null
-	var enemy_global_spawners :Array[EnemySpawner] = []
-	
-	# 从所有spawner中找出全局spawner
-	for spawner in enemy_spawners:
-		if spawner.spawn_type == EnemySpawner.SPAWN_TYPE.NORMAL:
-			enemy_global_spawners.append(spawner)
-	if enemy_global_spawners.is_empty():
-		push_warning("没有全局生成点!")
-		return null
-	
-	var random_index := random_generator.randi_range(0, enemy_global_spawners.size() - 1)
-	return enemy_global_spawners[random_index]
-	
-	
-func _get_alive_enemy_count() -> int:
-	var alive_enemy_count := 0
-	
-	for child in enemy_container.get_children():
-		if child is Enemy:
-			alive_enemy_count += 1
-		
-	return alive_enemy_count

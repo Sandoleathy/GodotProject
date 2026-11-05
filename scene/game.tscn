@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bo7s844lifke2" path="res://resources/texture/动态瓦片.png" id="2_xwcet"]
 [ext_resource type="PackedScene" uid="uid://cg0tpxbelpytl" path="res://scene/player.tscn" id="3_p1ry8"]
 [ext_resource type="FontFile" uid="uid://unlk3ambeim8" path="res://resources/font/IPix.ttf" id="5_xlg7c"]
+[ext_resource type="Script" uid="uid://xmra4wfjabpp" path="res://resources/scripts/game/enemy_manager.gd" id="5_ym5sv"]
 [ext_resource type="PackedScene" uid="uid://dv4n2o32hne8p" path="res://scene/enemy_spawner.tscn" id="5_yq8tf"]
 [ext_resource type="Texture2D" uid="uid://cubenwmufb4ni" path="res://resources/texture/道具ui.png" id="6_qpk70"]
 [ext_resource type="AudioStream" uid="uid://b3ghnwwct7kkp" path="res://resources/audio/Cowboy_Secret.wav" id="7_17rxn"]
@@ -134,27 +135,30 @@ zoom = Vector2(2, 2)
 [node name="Player" parent="." unique_id=1715718104 instance=ExtResource("3_p1ry8")]
 position = Vector2(180, 52)
 
-[node name="EnemyContainer" type="Node2D" parent="." unique_id=811912429]
+[node name="EnemyManager" type="Node2D" parent="." unique_id=1271327325]
+script = ExtResource("5_ym5sv")
 
-[node name="EnemySpawnPoints" type="Node2D" parent="." unique_id=1530318903]
+[node name="EnemySpawnPoints" type="Node2D" parent="EnemyManager" unique_id=1530318903]
 
-[node name="SpanwerLeft" parent="EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
+[node name="SpanwerLeft" parent="EnemyManager/EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
 position = Vector2(8, 128)
 
-[node name="SpawnerRight" parent="EnemySpawnPoints" unique_id=940322042 instance=ExtResource("5_yq8tf")]
+[node name="SpawnerRight" parent="EnemyManager/EnemySpawnPoints" unique_id=940322042 instance=ExtResource("5_yq8tf")]
 position = Vector2(248, 128)
 
-[node name="SpawnerBottom" parent="EnemySpawnPoints" unique_id=1854332273 instance=ExtResource("5_yq8tf")]
+[node name="SpawnerBottom" parent="EnemyManager/EnemySpawnPoints" unique_id=1854332273 instance=ExtResource("5_yq8tf")]
 position = Vector2(144, 232)
 
-[node name="EnemySpawner" parent="EnemySpawnPoints" unique_id=420135124 instance=ExtResource("5_yq8tf")]
+[node name="EnemySpawner" parent="EnemyManager/EnemySpawnPoints" unique_id=420135124 instance=ExtResource("5_yq8tf")]
 position = Vector2(128, 32)
 spawn_type = 1
 player_detect_range = 80.0
 enemy_number = 20
 spawn_count_per_tick = 2
 
-[node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1531222781]
+[node name="EnemyContainer" type="Node2D" parent="EnemyManager" unique_id=811912429]
+
+[node name="EnemySpawnTimer" type="Timer" parent="EnemyManager" unique_id=1531222781]
 
 [node name="WorldBounds" type="Node2D" parent="." unique_id=1889435109]
 

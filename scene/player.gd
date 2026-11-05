@@ -384,7 +384,7 @@ func stop_run_time_audio() -> void:
 		pickup_sfx_player.stop()
 
 func _set_move_sfx_active(active: bool) -> void:
-	if move_sfx_player == null and move_sfx_player.stream == null:
+	if move_sfx_player == null or move_sfx_player.stream == null:
 		return
 		
 	if active:
