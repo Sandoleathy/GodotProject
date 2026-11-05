@@ -145,11 +145,9 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 
 **疑似缺陷（修之前先确认是有意为之）**
 
-- `scene/game.gd` 的 `_stop_world()` 设置 `Engine.time_scale = 0.0` 并 `get_tree().paused = true`，但返回主菜单时没有恢复，菜单可能处于暂停/零时标状态。
-- `scene/enemy_spawner.gd:103`：`if enemy_spawn_timer.timeout.is_connected(...): connect(...)` 条件反了，计时器实际永远不会连接。
-- `scene/player.gd:387`：`if move_sfx_player == null and move_sfx_player.stream == null:` 应为 `or`，否则空引用时直接崩溃。
-- `scene/player.gd:195-196`：`if default_pickup_sfx == null:` 时把 `pickup_stream` 赋成 `default_pickup_sfx`，兜底逻辑像是写反了。
-- `scene/enemy.gd:208-209`：`touch_damage_area.set_deferred("monitoring", true)` 连写两次，第二处大概率本意是 `false`。
+- `scene/game.gd` 的 `_stop_world()` 设置 `Engine.time_scale = 0.0` 并 `get_tree().paused = true`，但返回主菜单时没有恢复，菜单可能处于暂停/零时标状态。（计划修复）
+- `scene/enemy_spawner.gd:103`：`if enemy_spawn_timer.timeout.is_connected(...): connect(...)` 条件反了，计时器实际永远不会连接。（现已修复）
+- `scene/player.gd:387`：`if move_sfx_player == null and move_sfx_player.stream == null:` 应为 `or`，否则空引用时直接崩溃。（现已修复）
 
 **拼写遗留（保持局部一致，不要大规模重命名）**
 
