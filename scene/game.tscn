@@ -141,6 +141,7 @@ script = ExtResource("5_ym5sv")
 [node name="EnemySpawnPoints" type="Node2D" parent="EnemyManager" unique_id=1530318903]
 
 [node name="SpanwerLeft" parent="EnemyManager/EnemySpawnPoints" unique_id=1712208861 instance=ExtResource("5_yq8tf")]
+visible = false
 position = Vector2(8, 128)
 
 [node name="SpawnerRight" parent="EnemyManager/EnemySpawnPoints" unique_id=940322042 instance=ExtResource("5_yq8tf")]

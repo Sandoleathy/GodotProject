@@ -6,6 +6,8 @@ class_name MainMenu
 @onready var setting_button: Button = $VBoxContainer/SettingButton
 
 func _ready() -> void:
+	# 停止暂停
+	get_tree().paused = false
 	start_button.pressed.connect(_on_start_button_click)
 	quit_button.pressed.connect(_on_quit_button_click)
 	start_button.grab_focus()
