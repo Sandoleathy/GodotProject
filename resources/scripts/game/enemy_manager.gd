@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name EnemyManager
 
 @onready var enemy_spawn_points_root = $EnemySpawnPoints
