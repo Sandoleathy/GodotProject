@@ -8,7 +8,6 @@
 - **引擎**：Godot 4.7，`gl_compatibility` 渲染（Windows 下 `d3d12` 驱动），`canvas_items` 拉伸模式。
 - **语言**：GDScript（tab 缩进、带类型标注）；一个 `canvas_item` 着色器 `scene/blink.gdshader`。
 - **规模**：11 个 `.gd`、9 个 `.tscn`、全部数值/资源走 `.tres` 配置。
-- **目标平台**：Windows Desktop，导出预设写死到 `release/MyGodotGame.exe`（该目录被 git 忽略）。
 - **无自动化测试、无构建脚本、无 CI**。所有验证靠 Godot 编辑器实际运行。
 
 ## 2. 运行与验证
@@ -20,11 +19,8 @@
 3. `scene/game_test.tscn` 是未纳入版本管理的实验场景（第 2 关入口指向它），只在测刷怪点行为时用得着。
 4. 导出：编辑器 `项目 > 导出 > Windows Desktop`，产物在 `release/`。
 
-Godot 可执行文件当前**不在 PATH** 中（已确认）。若自行安装，可做单文件解析检查：
+Godot 可执行文件当前**不在 PATH** 中
 
-```powershell
-godot --headless --path . --check-only --script res://scene/player.gd
-```
 
 改完 `.gd` / `.tscn` / `.tres` 后如果无法启动编辑器，**必须明确告诉用户"未运行验证"**，不要声称改动能跑。
 
@@ -139,15 +135,9 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 
 **功能未完成**
 
-- `EnemySpawner` 的"靠近才刷怪"（`SPAWN_WHEN_CLOSE`）只有骨架：`_handle_player_detection()` 与 `_on_enemy_spawn_timer_timeout()` 都是 `pass  # TODO`；`Game._pick_global_spawner()` 目前只挑 `NORMAL` 类型。
 - `pause` 输入动作已定义但没有任何脚本消费。
-- 选关菜单的"设置"按钮无处理函数；`game_test.tscn` 尚未纳入版本管理。
+- 选关菜单的"设置"按钮无处理函数（还未开发）；
 
-**疑似缺陷（修之前先确认是有意为之）**
-
-- `scene/game.gd` 的 `_stop_world()` 设置 `Engine.time_scale = 0.0` 并 `get_tree().paused = true`，但返回主菜单时没有恢复，菜单可能处于暂停/零时标状态。（计划修复）
-- `scene/enemy_spawner.gd:103`：`if enemy_spawn_timer.timeout.is_connected(...): connect(...)` 条件反了，计时器实际永远不会连接。（现已修复）
-- `scene/player.gd:387`：`if move_sfx_player == null and move_sfx_player.stream == null:` 应为 `or`，否则空引用时直接崩溃。（现已修复）
 
 **拼写遗留（保持局部一致，不要大规模重命名）**
 
@@ -159,3 +149,4 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 - 提交前自查：`git status` 里不应出现 `release/`、`.godot/`、`*.tmp`；新增 `.tres` 的 UID 引用要能被编辑器解析。
 - 完成路线图条目后同步勾选 `README.md` 的开发计划（`- [x]`），这是本仓库的既有习惯。
 - 改动涉及本文件描述的结构/约定时，一并更新 `AGENTS.md`。
+- 由AI Agent开发的代码必须在名为`ai-develop`的分支中开发，所有AI在开发前**务必**检查所处的分支是否为`ai-develop`
