@@ -53,6 +53,9 @@ func _process(delta: float) -> void:
 	_check_game_result()
 
 func _configure_result_dialog() -> void:
+	if result_dialog == null:
+		push_warning("[Game]:无结果对话框!")
+		return
 	result_dialog.dialog_close_on_escape = false
 	result_dialog.ok_button_text = RESULT_OK_BUTTON_TEXT
 	result_dialog.hide()
@@ -65,6 +68,9 @@ func _configure_result_dialog() -> void:
 		result_dialog.canceled.connect(_on_result_dialog_exit_requested)
 
 func _setup_hud() ->void:
+	if time_bar == null:
+		push_warning("[Game]: 未检测到时间轴UI")
+		return
 	stage_time_left = maxf(stage_duration, 0.0)
 	time_bar_full_scale_x= time_bar.scale.x
 	if time_bar.texture != null:
@@ -88,9 +94,13 @@ func _update_hud() -> void:
 	_update_time_bar()
 	
 func _update_life_count_label() -> void:
+	if life_count_label == null:
+		return
 	life_count_label.text = "x %d" % _get_player_current_health()
 	
 func _update_time_bar() -> void:
+	if time_bar == null:
+		return
 	var fill_ratio :float = 0.0
 	if stage_duration > 0.0:
 		fill_ratio = clampf(stage_time_left/stage_duration, 0.0, 1.0)
@@ -112,6 +122,9 @@ func _check_game_result() -> void:
 
 func _show_result_dialog(title: String, message: String) -> void:
 	if is_result_displayed:
+		return
+	if result_dialog == null:
+		push_warning("[Game]: 未检测到结果对话框")
 		return
 	
 	is_result_displayed = true
