@@ -340,27 +340,27 @@ func _try_drop_pickup() -> void:
 	if random_generator.randf() > config.pickup_drop_chance:
 		return
 	
-	var pickup_config = _pick_pick_up_drop_config()
-	if pickup_config == null:
+	var effect_config = _pick_pick_up_drop_config()
+	if effect_config == null:
 		return
 	
-	call_deferred("_spwan_dropped_pickup", pickup_config, global_position)
+	call_deferred("_spwan_dropped_pickup", effect_config, global_position)
 	
-func _pick_pick_up_drop_config() -> PickupConfig:
+func _pick_pick_up_drop_config() -> EffectConfig:
 	if config == null:
 		return null
 	
-	var available_pick_configs: Array[PickupConfig] = []
+	var available_pick_configs: Array[EffectConfig] = []
 	var total_weight := 0.0
 	
-	for pickup_config in config.pick_up_drop_configs:
-		if pickup_config == null:
+	for effect_config in config.pick_up_drop_configs:
+		if effect_config == null:
 			continue
-		if pickup_config.drop_weight <= 0.0:
+		if effect_config.drop_weight <= 0.0:
 			continue
 		
-		available_pick_configs.append(pickup_config)
-		total_weight += pickup_config.drop_weight
+		available_pick_configs.append(effect_config)
+		total_weight += effect_config.drop_weight
 	if available_pick_configs.is_empty():
 		return null
 	if total_weight <= 0.0:
@@ -369,14 +369,14 @@ func _pick_pick_up_drop_config() -> PickupConfig:
 	var target_weight := random_generator.randf_range(0.0, total_weight)
 	var accumulated_weight := 0.0
 	
-	for pickup_config in available_pick_configs:
-		accumulated_weight += pickup_config.drop_weight
+	for effect_config in available_pick_configs:
+		accumulated_weight += effect_config.drop_weight
 		if target_weight <= accumulated_weight:
-			return pickup_config
+			return effect_config
 		
 	return available_pick_configs.back()
 	
-func _spwan_dropped_pickup(pickup_config: PickupConfig, spwan_position: Vector2) -> void:
+func _spwan_dropped_pickup(effect_config: EffectConfig, spwan_position: Vector2) -> void:
 	var drop_parent := get_parent()
 	if drop_parent == null:
 		return
@@ -385,7 +385,7 @@ func _spwan_dropped_pickup(pickup_config: PickupConfig, spwan_position: Vector2)
 	if pickup_instance == null:
 		return
 		
-	pickup_instance.config = pickup_config
+	pickup_instance.config = effect_config
 	drop_parent.add_child(pickup_instance)
 	pickup_instance.global_position = spwan_position
 	

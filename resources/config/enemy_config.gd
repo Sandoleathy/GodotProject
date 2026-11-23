@@ -31,8 +31,8 @@ enum EnemyType {
 
 @export_group("掉落")
 @export_range(0.0, 1.0, 0.01) var pickup_drop_chance: float = 0.3
-@export var pick_up_drop_configs: Array[PickupConfig] = [
-	preload("res://resources/config/pickup_configs/pickup_rapid.tres"),
-	preload("res://resources/config/pickup_configs/pickup_speed.tres"),
-	preload("res://resources/config/pickup_configs/pickup_spiral.tres"),
+@export var pick_up_drop_configs: Array[EffectConfig] = [
+	preload("res://resources/config/effect_configs/effect_rapid.tres"),
+	preload("res://resources/config/effect_configs/effect_speed.tres"),
+	preload("res://resources/config/effect_configs/effect_spiral.tres"),
 ]

@@ -30,9 +30,9 @@ Godot 可执行文件当前**不在 PATH** 中
 | --- | --- |
 | `project.godot` | 工程配置：主场景、输入映射、物理层命名、渲染 |
 | `scene/` | 玩法场景与一一对应的脚本（game / player / enemy / enemy_spawner / bullet / pickup） |
-| `resources/config/` | `Resource` 定义（`enemy_config.gd`、`pickup_config.gd`）及其 `.tres` 实例目录 |
+| `resources/config/` | `Resource` 定义（`enemy_config.gd`、`effect_config.gd`）及其 `.tres` 实例目录 |
 | `resources/config/enemy_configs/` | 4 种敌人配置：basic、bomber、fast、shelled |
-| `resources/config/pickup_configs/` | 5 种道具配置：speed、rapid、spiral、continue_healing、immediate_healing |
+| `resources/config/effect_configs/` | 5 种效果配置：speed、rapid、spiral、continue_healing、immediate_healing |
 | `resources/animation/` | `SpriteFrames`（敌人动画：`move` / `death` / `explode`） |
 | `resources/atlas/` | 从 `道具ui.png` 切出的 `AtlasTexture`，供道具图标使用 |
 | `resources/scripts/` | 非场景脚本：菜单脚本 `menu_scripts/`、持续回血节点 `continue_healing_unit.gd` |
@@ -67,7 +67,7 @@ game.tscn 结算框「返回主菜单」→ main_menu.tscn
 
 ```
 EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Game 实例化 Enemy
-        └─ pick_up_drop_configs ──► PickupConfig(.tres) ──► PickUp ──► Player.apply_pickup
+        └─ pick_up_drop_configs ──► EffectConfig(.tres) ──► PickUp ──► Player.apply_pickup
 ```
 
 所有配置通过 UID 互相引用，没有注册表、没有 autoload（全局类靠 `class_name`）。新增内容不需要改任何"列表文件"，但要挂到上面这条链路的数组里。
@@ -79,18 +79,18 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 1. 复制 `resources/config/enemy_configs/enemy_basic.tres`，改 `enemy_type`、`max_health`、`move_speed`、`collision_radius`（该半径同时作用于本体和接触伤害区）。
 2. `enemy_frames` 指向 `resources/animation/*.tres`；动画名必须与 `EnemyConfig` 的 `move_animation_name` / `death_animation_name` / `explosion_animation_name` 对得上（默认 `move`、`death`、`explode`）。
 3. 会自爆的敌人：`explode_in_death = true`，并设 `explosion_damage` 与 `explosion_radius`。
-4. 掉落：`pickup_drop_chance` + `pick_up_drop_configs`（数组内可重复以调权重），实际抽取还会乘 `PickupConfig.drop_weight`。
+4. 掉落：`pickup_drop_chance` + `pick_up_drop_configs`（数组内可重复以调权重），实际抽取还会乘 `EffectConfig.drop_weight`。
 5. 把新 `.tres` 加入 `EnemySpawner.enemy_configs` 的默认数组（`enemy_spawner.gd` 顶部）或具体场景里 spawner 节点的该属性。
 
 ### 新增一种道具
 
 1. 在 `resources/atlas/` 建 `AtlasTexture`（从 `resources/texture/道具ui.png` 切图）。
-2. 复制一个 `resources/config/pickup_configs/*.tres`，按需设 `pickup_type`、`duration`、`move_speed_multiplier`、`fire_rate_multiplier`、`healing_amount`、`player_form_mode`、`shot_pattern`、`icon_texture`、`audio_stream`、`drop_weight`。
+2. 复制一个 `resources/config/effect_configs/*.tres`，按需设 `pickup_type`、`duration`、`move_speed_multiplier`、`fire_rate_multiplier`、`healing_amount`、`player_form_mode`、`shot_pattern`、`icon_texture`、`audio_stream`、`drop_weight`。
 3. 加入某个 `EnemyConfig.pick_up_drop_configs`（通常是 bomber 的掉落表）。
 
 ### 改数值/平衡
 
-优先改 `.tres`，不要把数值硬编码进 `.gd`。只有在需要新的**行为维度**时才给 `EnemyConfig` / `PickupConfig` 加 `@export` 字段，并在 `Enemy._apply_config` 或 `Player.apply_pickup` 里消费它。
+优先改 `.tres`，不要把数值硬编码进 `.gd`。只有在需要新的**行为维度**时才给 `EnemyConfig` / `EffectConfig` 加 `@export` 字段，并在 `Enemy._apply_config` 或 `Player.apply_pickup` 里消费它。
 
 ### 改刷怪节奏
 

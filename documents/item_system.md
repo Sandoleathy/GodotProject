@@ -41,7 +41,7 @@ B[item_instance] --引用-->A[item_config]
 5. description 物品描述
 6. max_stack 最大堆叠数量
 7. useable 物品是否可以使用
-8. use_effect 指向指向effect_config（改造后的pickup config）
+8. use_effect 指向 effect_config
 9. weight 物品重量
 10. slot_capacity 容器大小（如果是容器，非容器为0）
 11. slot_black_list 容器黑名单（不能放入该容器的物品）

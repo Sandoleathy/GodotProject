@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dt7s5xvotf76f"]
 
 [ext_resource type="SpriteFrames" uid="uid://2fannubs6ira" path="res://resources/animation/enemy_fast.tres" id="1_bx1s4"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_5ta1o"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="3_3ng5w"]
-[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="4_s3bos"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/effect_config.gd" id="2_5ta1o"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/effect_configs/effect_speed.tres" id="3_3ng5w"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/effect_configs/effect_continue_healing.tres" id="4_s3bos"]
 [ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="5_iv0dy"]
 
 [resource]

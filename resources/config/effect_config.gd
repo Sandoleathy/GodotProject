@@ -1,5 +1,5 @@
 extends Resource
-class_name PickupConfig
+class_name EffectConfig
 
 enum PickupType {
 	SPEED,

@@ -19,7 +19,7 @@ enum ItemType {
 @export_group("数值")
 @export_range(1, 10, 1, "or_greater") var max_stack: int # 物品最大堆叠数量
 @export var useable: bool
-@export var use_effect: PickupConfig # 指向effect_config（改造后的pickup config）
+@export var use_effect: EffectConfig # 指向 effect_config
 @export_range(0.001, 100.0, 0.1, "or_greater") var weight: float # 物品重量
 @export_range(0.0, 10.0, 0.1, "or_greater") var rarity: float # 稀有度
 @export_range(1.0, 200.0, 1.0, "or_greater") var max_duration # 最大耐久值

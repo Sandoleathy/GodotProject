@@ -36,8 +36,8 @@ var facing_suffix := &"right"
 var current_move_speed_multiplier: float = DEFAULT_MOVE_SPEED_MULTIPLIER
 var rapid_fire_rate_multiplier: float = DEFAULT_FIRE_RATE_MULTIPLIER
 var form_fire_rate_multiplier: float = DEFAULT_FIRE_RATE_MULTIPLIER
-var current_form_mode: int = PickupConfig.PlayerFormMode.NORMAL
-var current_shot_pattern: int = PickupConfig.ShotPattern.NORMAL
+var current_form_mode: int = EffectConfig.PlayerFormMode.NORMAL
+var current_shot_pattern: int = EffectConfig.ShotPattern.NORMAL
 var speed_buff_time_left: float = 0.0
 var rapid_buff_time_left: float = 0.0
 var form_buff_time_left: float = 0.0
@@ -87,7 +87,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_set_move_sfx_active(is_moving)
 	
-	if current_shot_pattern == PickupConfig.ShotPattern.SPIRAL:
+	if current_shot_pattern == EffectConfig.ShotPattern.SPIRAL:
 		_try_auto_spiral_shoot()
 	# 需要判别，只有当射击按键按下时，尝试射击
 	elif is_shooting:
@@ -120,7 +120,7 @@ func _update_animation() -> void:
 		body_sprite.play(animation_name)
 
 func _update_facing(move_input: Vector2, shoot_input: Vector2, is_shooting: bool) -> void:
-	if current_shot_pattern == PickupConfig.ShotPattern.SPIRAL:
+	if current_shot_pattern == EffectConfig.ShotPattern.SPIRAL:
 		if move_input != Vector2.ZERO:
 			facing_suffix = _vector_to_facing_suffix(move_input)
 		return
@@ -141,15 +141,15 @@ func _try_shoot(shoot_input: Vector2) -> void:
 	shooting_timer.start(_get_effective_fire_interval())
 
 # 处理pickup
-func apply_pickup(config: PickupConfig) -> bool:
+func apply_pickup(config: EffectConfig) -> bool:
 	if config == null:
 		return false
 	var applied:= false
 	var should_refresh_shooting_timer := false
 	var buff_duration := maxf(config.duration, 1.0)
 	var has_form_override := (
-		config.player_form_mode != PickupConfig.PlayerFormMode.NORMAL
-		or config.shot_pattern != PickupConfig.ShotPattern.NORMAL
+		config.player_form_mode != EffectConfig.PlayerFormMode.NORMAL
+		or config.shot_pattern != EffectConfig.ShotPattern.NORMAL
 	)
 	var has_fire_rate_override := not is_equal_approx(
 		config.fire_rate_multiplier,
@@ -179,10 +179,10 @@ func apply_pickup(config: PickupConfig) -> bool:
 		applied = true
 	
 	if config.healing_amount >= 0:
-		if config.pickup_type == PickupConfig.PickupType.IMMEDIATE_HEALING:
+		if config.pickup_type == EffectConfig.PickupType.IMMEDIATE_HEALING:
 			apply_healing(config.healing_amount)
 			applied = true
-		if config.pickup_type == PickupConfig.PickupType.CONTINUE_HEALING:
+		if config.pickup_type == EffectConfig.PickupType.CONTINUE_HEALING:
 			# TODO 恢复器启动
 			continue_healing_unit.set_healing_data(config.healing_amount, config.duration)
 			applied = true
@@ -224,7 +224,7 @@ func get_current_health() -> int:
 	return current_health
 
 func _fire_bullets(base_direction: Vector2) -> bool:
-	if current_shot_pattern == PickupConfig.ShotPattern.SPIRAL:
+	if current_shot_pattern == EffectConfig.ShotPattern.SPIRAL:
 		var has_spawned_forward_bullet := _spawn_bullet(base_direction)
 		var has_spwaned_backward_bullet := _spawn_bullet(base_direction.rotated(PI))
 		spiral_phase = wrapf(spiral_phase + SPIRAL_PHASE_STEP, 0.0, TAU)
@@ -291,8 +291,8 @@ func _update_pickup_effects(delta: float) -> void:
 	if form_buff_time_left > 0.0:
 		form_buff_time_left = maxf(form_buff_time_left - delta, 0.0)
 		if form_buff_time_left <= 0:
-			current_form_mode = PickupConfig.PlayerFormMode.NORMAL
-			current_shot_pattern = PickupConfig.ShotPattern.NORMAL
+			current_form_mode = EffectConfig.PlayerFormMode.NORMAL
+			current_shot_pattern = EffectConfig.ShotPattern.NORMAL
 			form_fire_rate_multiplier = DEFAULT_FIRE_RATE_MULTIPLIER
 			spiral_phase = 0.0
 			_refresh_shooting_timer_wait_time()
@@ -318,8 +318,8 @@ func _get_effective_fire_rate_multiplier() -> float:
 	
 func _has_active_form_override() -> bool:
 	return (
-		current_form_mode != PickupConfig.PlayerFormMode.NORMAL
-		or current_shot_pattern != PickupConfig.ShotPattern.NORMAL
+		current_form_mode != EffectConfig.PlayerFormMode.NORMAL
+		or current_shot_pattern != EffectConfig.ShotPattern.NORMAL
 	)
 
 func _refresh_shooting_timer_wait_time() -> void:
@@ -353,12 +353,12 @@ func _die() -> void:
 	armed_effect_sprite.stop()
 
 func _get_animation_prefix() -> StringName:
-	if current_form_mode == PickupConfig.PlayerFormMode.ARMED:
+	if current_form_mode == EffectConfig.PlayerFormMode.ARMED:
 		return ARMED_ANIMATION_PREFIX
 	return NORMAL_ANIMATION_PREFIX
 
 func _update_armed_effect() -> void:
-	var is_armed := current_form_mode == PickupConfig.PlayerFormMode.ARMED
+	var is_armed := current_form_mode == EffectConfig.PlayerFormMode.ARMED
 	
 	if not is_armed:
 		if armed_effect_sprite.visible:

@@ -3,7 +3,7 @@ class_name PickUp
 
 const BLINK_ENABLEED_SHADER_PARAMETER := &"blink_enable"
 
-@export var config: PickupConfig
+@export var config: EffectConfig
 
 @export_range(0.0, 10.0, 0.1, "or_greater") var blink_before_expire: float = 1.2
 
@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 	
 func _apply_config_to_visual() -> void:
 	if config == null:
-		push_warning("Pickup config is null")
+		push_warning("Effect config is null")
 		return
 	
 	sprite.texture = config.icon_texture

@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dw4nqkmwdvvmf"]
 
 [ext_resource type="SpriteFrames" uid="uid://cu5xdr1r8sskk" path="res://resources/animation/enemy_boomber.tres" id="1_cnub0"]
-[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/pickup_config.gd" id="2_niikm"]
-[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/pickup_configs/pickup_rapid.tres" id="3_rad3s"]
-[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/pickup_configs/pickup_speed.tres" id="4_chpyn"]
-[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/pickup_configs/pickup_spiral.tres" id="5_f3fcu"]
-[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/pickup_configs/pickup_continue_healing.tres" id="6_o543e"]
-[ext_resource type="Resource" uid="uid://dir3lb3us2d04" path="res://resources/config/pickup_configs/pickup_immediate_healing.tres" id="7_0acp4"]
+[ext_resource type="Script" uid="uid://fv5ohxpw884h" path="res://resources/config/effect_config.gd" id="2_niikm"]
+[ext_resource type="Resource" uid="uid://en4v2kbekea4" path="res://resources/config/effect_configs/effect_rapid.tres" id="3_rad3s"]
+[ext_resource type="Resource" uid="uid://b65lguqdn671l" path="res://resources/config/effect_configs/effect_speed.tres" id="4_chpyn"]
+[ext_resource type="Resource" uid="uid://v7b3kpcvwwov" path="res://resources/config/effect_configs/effect_spiral.tres" id="5_f3fcu"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/effect_configs/effect_continue_healing.tres" id="6_o543e"]
+[ext_resource type="Resource" uid="uid://dir3lb3us2d04" path="res://resources/config/effect_configs/effect_immediate_healing.tres" id="7_0acp4"]
 [ext_resource type="Script" uid="uid://b550hu8ij2xnm" path="res://resources/config/enemy_config.gd" id="8_uev0w"]
 
 [resource]
