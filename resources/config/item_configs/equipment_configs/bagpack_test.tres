@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentConfig" format=3 uid="uid://bs0fwt83iu2sq"]
+
+[ext_resource type="Texture2D" uid="uid://bna1ney18jeh4" path="res://resources/atlas/bagpack_test_icon.tres" id="1_nmlr6"]
+[ext_resource type="Script" uid="uid://dc17ofpitwp2o" path="res://resources/config/equipment_config.gd" id="1_x1t8w"]
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="2_nmlr6"]
+
+[resource]
+script = ExtResource("1_x1t8w")
+equipment_slot = 3
+name = "bagpack test"
+item_type = 3
+label = "test equipment"
+description = "测试背包"
+icon_texture = ExtResource("1_nmlr6")
+weight = 1.001
+rarity = 0.6
+max_duration = null
+slot_capacity = 15
+metadata/_custom_type_script = "uid://dc17ofpitwp2o"

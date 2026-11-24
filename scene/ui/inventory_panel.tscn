@@ -9,7 +9,7 @@ content_margin_left = 18.0
 content_margin_top = 14.0
 content_margin_right = 18.0
 content_margin_bottom = 14.0
-bg_color = Color(0.045, 0.065, 0.085, 0.98)
+bg_color = Color(0.045, 0.065, 0.085, 0.76)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -25,7 +25,7 @@ content_margin_left = 12.0
 content_margin_top = 10.0
 content_margin_right = 12.0
 content_margin_bottom = 10.0
-bg_color = Color(0.065, 0.085, 0.105, 1)
+bg_color = Color(0.065, 0.085, 0.105, 0.62)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_left = 4
@@ -53,7 +53,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.01, 0.02, 0.025, 0.8)
+color = Color(0.01, 0.02, 0.025, 0.22)
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -120,7 +120,7 @@ text = "装备"
 [node name="EquipmentHint" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "仅展示当前装备"
+text = "拖动物品穿戴或卸下"
 
 [node name="EquipmentGrid" type="GridContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout"]
 unique_name_in_owner = true
@@ -170,72 +170,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "背包未绑定"
 
-[node name="InventoryGrid" type="GridContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection"]
+[node name="InventorySections" type="VBoxContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-columns = 5
-
-[node name="Slot01" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot02" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot03" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot04" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot05" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot06" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot07" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot08" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot09" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot10" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot11" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot12" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot13" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot14" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot15" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot16" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot17" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot18" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot19" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
-
-[node name="Slot20" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
-layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
 
 [node name="DetailPanel" type="PanelContainer" parent="Margin/Panel/Layout/BodyScroll/Columns"]
 custom_minimum_size = Vector2(280, 0)

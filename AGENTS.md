@@ -4,7 +4,7 @@
 
 ## 1. 项目概览
 
-- **是什么**：Godot 4.7 制作的 2D 俯视角射击小游戏，工程名 `GodotTutorial-明日方舟-肿么滴`，版本 `1.1`。以《Journey of the Prairie King》风格教程为起点，已演进成"关卡计时 + 刷怪器 + 数据驱动敌人/道具"的小游戏。
+- **是什么**：Godot 4.7 制作的 2D 俯视角射击小游戏，工程名 `GodotTutorial-明日方舟-肿么滴`，版本 `0.1.2`。以《Journey of the Prairie King》风格教程为起点，已演进成"关卡计时 + 刷怪器 + 数据驱动敌人/道具"的小游戏。
 - **引擎**：Godot 4.7，`gl_compatibility` 渲染（Windows 下 `d3d12` 驱动），`canvas_items` 拉伸模式。
 - **语言**：GDScript（tab 缩进、带类型标注）；一个 `canvas_item` 着色器 `scene/blink.gdshader`。
 - **规模**：11 个 `.gd`、9 个 `.tscn`、全部数值/资源走 `.tres` 配置。
@@ -66,11 +66,11 @@ game.tscn 结算框「返回主菜单」→ main_menu.tscn
 ### 单局物品系统
 
 - `resources/scripts/items/item_instance.gd`：`RefCounted` 运行时物品，独立数量/耐久/实例ID，配置只读。
-- `resources/scripts/items/inventory.gd`：Player 子节点，默认20格，先堆叠后空格；`try_add()` 返回实际接收数量，`consume_one()` 校验实例ID，`changed` 刷新UI。
-- `resources/scripts/items/equipment.gd`：八个装备槽的数据查询，首版仅展示，未接穿脱/扩容/防护。
-- `scene/world_item.tscn` / `scene/world_item.gd`：新地面物品，配置为 ItemConfig；碰触入包、部分拾取保留余量、无自动销毁。与旧 PickUp 的即时效果链路并存。
+- `resources/scripts/items/inventory.gd` / `inventory_section.gd`：Player 子节点，基础4格及装备拥有的独立分区；黑名单优先、非空白名单限制放入；先堆叠后空格，`try_add()` 返回实际接收数量，`changed` 刷新UI。
+- `resources/scripts/items/equipment.gd`：八个装备槽数据；`item_interaction.gd` 统一校验位置与实例ID，处理移动、交换、合并、穿脱、使用和丢弃；卸下装备时其分区内容物全部掉落，禁止卸入自身分区。未接装备属性/防护效果。
+- `scene/world_item.tscn` / `scene/world_item.gd`：ItemConfig地面物品，`pickup_interactor.gd` 按距离选择最近目标，F拾取；部分拾取保留余量，无自动销毁，丢弃保留实例/耐久。与旧 PickUp 的即时效果链路并存。
 - `scene/ui/inventory_layer.tscn` / `.gd`：由 Game 创建，绑定同级 Player；TAB 切换并暂停战局，Esc 关闭，结算暂停不能打开。
-- `scene/ui/inventory_panel.tscn` / `.gd`、`scene/ui/item_slot.tscn` / `.gd`：左装备右背包，详情/重量/使用。使用请求走 `Player.use_inventory_item()`，成功后消耗1个；满血和无效使用不消耗。
+- `scene/ui/inventory_panel.tscn` / `.gd`、`scene/ui/item_slot.tscn` / `.gd`：左装备右分区，详情/重量/使用；`inventory_section.gd` / `.tscn` 动态显示各分区。原生拖拽在落点校验成功后提交，预览1.05倍，关闭面板取消拖拽。使用/丢弃统一走 ItemInteraction，满血和无效使用不消耗。
 - 现有 `max_duration` 配置允许 null，实例按无耐久0处理；默认最大堆叠为1。ItemConfig.id 是预留稳定标识，当前堆叠按配置引用/资源路径及耐久匹配。
 - 本系统玩家可见文案随对应 UI/Player 脚本维护。无 Autoload、存档、负重惩罚、容器嵌套。
 
@@ -122,7 +122,7 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 | 7 | Explosion | Enemy `ExplosionDamageArea`（layer 64，mask 6 = Player+EnemyBody） |
 | 8 | SpawnerDetect | EnemySpawner `DetectRange`（layer 128，mask 2） |
 
-输入动作：`move_left/right/up/down`（WASD）、`shoot_left/right/up/down`（方向键/手柄轴）、`shooting`（鼠标左键 / 手柄按钮）、`toggle_inventory`（TAB，装备/背包）、`pause`（Esc，关闭背包）。新增输入请写进 `project.godot` 的 `[input]`，不要在脚本里读裸键码。
+输入动作：`move_left/right/up/down`（WASD）、`shoot_left/right/up/down`（方向键/手柄轴）、`shooting`（鼠标左键 / 手柄按钮）、`toggle_inventory`（TAB，装备/背包）、`pickup_item`（F，最近物品）、`drop_item`（Delete，整堆丢弃）、`pause`（Esc，关闭背包）。新增输入请写进 `project.godot` 的 `[input]`，不要在脚本里读裸键码。
 
 ## 7. 代码约定
 

@@ -11,6 +11,8 @@
 
 [ext_resource type="Script" path="res://resources/scripts/items/inventory.gd" id="9_inventory"]
 [ext_resource type="Script" path="res://resources/scripts/items/equipment.gd" id="10_equipment"]
+[ext_resource type="Script" path="res://resources/scripts/items/item_interaction.gd" id="11_interaction"]
+[ext_resource type="Script" path="res://resources/scripts/items/pickup_interactor.gd" id="12_pickup"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xwcet"]
 resource_local_to_scene = true
@@ -422,6 +424,12 @@ stream = ExtResource("6_g2vtq")
 
 [node name="PickupSfxPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1552961179]
 stream = ExtResource("7_2fvbb")
+
+[node name="ItemInteraction" type="Node" parent="."]
+script = ExtResource("11_interaction")
+
+[node name="PickupInteractor" type="Node" parent="."]
+script = ExtResource("12_pickup")
 
 [node name="ContinueHealingUnit" type="Node" parent="." unique_id=1477231579]
 script = ExtResource("8_g2vtq")

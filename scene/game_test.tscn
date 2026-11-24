@@ -5,11 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://cg0tpxbelpytl" path="res://scene/player.tscn" id="2_dc7x1"]
 [ext_resource type="PackedScene" uid="uid://dv4n2o32hne8p" path="res://scene/enemy_spawner.tscn" id="3_s6f8k"]
 [ext_resource type="Script" uid="uid://xmra4wfjabpp" path="res://resources/scripts/game/enemy_manager.gd" id="5_vrrag"]
-
-[ext_resource type="PackedScene" path="res://scene/world_item.tscn" id="6_item"]
-[ext_resource type="Resource" path="res://resources/config/item_configs/medicine.tres" id="7_med"]
-[ext_resource type="Resource" path="res://resources/config/item_configs/weapon_test.tres" id="8_weapon"]
-[ext_resource type="Resource" path="res://resources/config/item_configs/loot.tres" id="9_loot"]
+[ext_resource type="PackedScene" uid="uid://by803j5k82l3t" path="res://scene/world_item.tscn" id="6_item"]
+[ext_resource type="Texture2D" uid="uid://t70cli6hudww" path="res://resources/atlas/pickup_continue_healing.tres" id="7_14pea"]
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="8_0y0s8"]
+[ext_resource type="Resource" uid="uid://bcc7ti2pn8l1x" path="res://resources/config/item_configs/weapon_test.tres" id="8_weapon"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/effect_configs/effect_continue_healing.tres" id="9_7aj51"]
+[ext_resource type="Resource" uid="uid://ck65p7wuooiug" path="res://resources/config/item_configs/loot.tres" id="9_loot"]
+[ext_resource type="Resource" uid="uid://dq2cb83q5ri8i" path="res://resources/config/item_configs/equipment_configs/helmet_test.tres" id="12_0y0s8"]
+[ext_resource type="Resource" uid="uid://bs0fwt83iu2sq" path="res://resources/config/item_configs/equipment_configs/bagpack_test.tres" id="13_its6n"]
+[ext_resource type="Resource" uid="uid://dlos6m5banfbm" path="res://resources/config/item_configs/equipment_configs/chest_harness_test.tres" id="14_01di5"]
+[ext_resource type="Resource" uid="uid://8ehvg5ddqmcl" path="res://resources/config/item_configs/equipment_configs/belt_test.tres" id="15_4e8pg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dc7x1"]
 texture = ExtResource("1_l0k62")
@@ -29,6 +34,21 @@ texture = ExtResource("1_l0k62")
 [sub_resource type="TileSet" id="TileSet_3aokr"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_dc7x1")
+
+[sub_resource type="Resource" id="Resource_otku6"]
+resource_local_to_scene = true
+script = ExtResource("8_0y0s8")
+name = "MedicineA"
+item_type = 1
+label = "MedicineA"
+description = "药物1"
+icon_texture = ExtResource("7_14pea")
+max_stack = 10
+useable = true
+use_effect = ExtResource("9_7aj51")
+rarity = 1.2
+max_duration = null
+metadata/_custom_type_script = "uid://dpvwceo5trwa0"
 
 [node name="GameTest" type="Node2D" unique_id=972983357]
 script = ExtResource("1_chlyc")
@@ -58,27 +78,44 @@ player_detect_range = 50.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="EnemyManager" unique_id=1751354898]
 
-[node name="WorldItems" type="Node2D" parent="."]
+[node name="WorldItems" type="Node2D" parent="." unique_id=868008027]
 
-[node name="Medicine" parent="WorldItems" instance=ExtResource("6_item")]
-position = Vector2(-55, 35)
-config = ExtResource("7_med")
+[node name="Medicine" parent="WorldItems" unique_id=864166501 instance=ExtResource("6_item")]
+position = Vector2(-72, 53)
+config = SubResource("Resource_otku6")
 count = 3
 
-[node name="Weapon" parent="WorldItems" instance=ExtResource("6_item")]
-position = Vector2(0, 55)
+[node name="Weapon" parent="WorldItems" unique_id=1302532160 instance=ExtResource("6_item")]
+position = Vector2(-43, 52)
 config = ExtResource("8_weapon")
 
-[node name="Loot" parent="WorldItems" instance=ExtResource("6_item")]
-position = Vector2(55, 35)
+[node name="Loot" parent="WorldItems" unique_id=1030651282 instance=ExtResource("6_item")]
+position = Vector2(-12, 52)
 config = ExtResource("9_loot")
 count = 5
 
-[node name="TestHint" type="Label" parent="."]
+[node name="Helmet" parent="WorldItems" unique_id=751209096 instance=ExtResource("6_item")]
+position = Vector2(22, 52)
+config = ExtResource("12_0y0s8")
+
+[node name="Bag" parent="WorldItems" unique_id=630548136 instance=ExtResource("6_item")]
+position = Vector2(53, 52)
+config = ExtResource("13_its6n")
+
+[node name="ChestHarness" parent="WorldItems" unique_id=510715491 instance=ExtResource("6_item")]
+position = Vector2(84, 37)
+config = ExtResource("14_01di5")
+
+[node name="Belt" parent="WorldItems" unique_id=1466713190 instance=ExtResource("6_item")]
+position = Vector2(82, -2)
+config = ExtResource("15_4e8pg")
+
+[node name="TestHint" type="Label" parent="." unique_id=1447720923]
 offset_left = -150.0
 offset_top = -130.0
 offset_right = 150.0
 offset_bottom = -105.0
 theme_override_font_sizes/font_size = 10
-text = "碰触拾取物品 · TAB 打开背包\n受伤后可使用药品，关闭背包后持续回血"
+text = "F 拾取最近物品 · TAB 打开物品栏
+拖动穿脱装备 · Delete 整堆丢弃"
 horizontal_alignment = 1

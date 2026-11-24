@@ -1,0 +1,6 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://dsf4yw8uoe5xd"]
+
+[ext_resource type="Texture2D" uid="uid://dwoyt4rtv53va" path="res://helmet_icon.png" id="1_6lfli"]
+
+[resource]
+atlas = ExtResource("1_6lfli")

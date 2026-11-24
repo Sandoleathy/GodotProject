@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentConfig" format=3 uid="uid://dlos6m5banfbm"]
+
+[ext_resource type="Script" uid="uid://dc17ofpitwp2o" path="res://resources/config/equipment_config.gd" id="1_cbgqp"]
+[ext_resource type="Texture2D" uid="uid://0avio7vhnflk" path="res://resources/atlas/chest_harness_test_icon.tres" id="1_tyq1k"]
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="2_tyq1k"]
+
+[resource]
+script = ExtResource("1_cbgqp")
+equipment_slot = 2
+name = "chest harness test"
+item_type = 3
+label = "test equipment"
+description = "测试用胸挂"
+icon_texture = ExtResource("1_tyq1k")
+weight = 1.501
+rarity = 0.6
+max_duration = null
+slot_capacity = 10
+metadata/_custom_type_script = "uid://dc17ofpitwp2o"

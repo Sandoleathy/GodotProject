@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EquipmentConfig" format=3 uid="uid://dq2cb83q5ri8i"]
+
+[ext_resource type="Script" uid="uid://dc17ofpitwp2o" path="res://resources/config/equipment_config.gd" id="1_7octi"]
+[ext_resource type="Texture2D" uid="uid://dsf4yw8uoe5xd" path="res://resources/atlas/helmet_test_icon.tres" id="1_yacn4"]
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="2_yacn4"]
+
+[resource]
+script = ExtResource("1_7octi")
+name = "helmet test"
+item_type = 3
+label = "test equipment"
+description = "头盔试"
+icon_texture = ExtResource("1_yacn4")
+weight = 0.801
+rarity = 0.6
+max_duration = null
+metadata/_custom_type_script = "uid://dc17ofpitwp2o"

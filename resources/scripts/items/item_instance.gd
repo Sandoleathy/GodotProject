@@ -15,7 +15,5 @@ func _init(item_config: ItemConfig, amount: int = 1) -> void:
 func can_stack_with(other: ItemInstance) -> bool:
 	if other == null or config == null or other.config == null:
 		return false
-	var same_config := config == other.config
-	if not same_config and not config.resource_path.is_empty():
-		same_config = config.resource_path == other.config.resource_path
+	var same_config := InventorySection.matches(config, other.config)
 	return same_config and is_equal_approx(durability, other.durability) and config.max_stack > 1

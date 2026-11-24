@@ -23,6 +23,8 @@ signal inventory_message(message: String)
 
 @onready var inventory: Inventory = $Inventory
 @onready var equipment: Equipment = $Equipment
+@onready var item_interaction: ItemInteraction = $ItemInteraction
+@onready var pickup_interactor: PickupInteractor = $PickupInteractor
 var _wait_shoot_release: bool = false
 
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
@@ -154,24 +156,13 @@ func try_pickup_item(item: ItemInstance) -> int:
 		return 0
 	var accepted := inventory.try_add(item)
 	if accepted == 0:
-		inventory_message.emit("物品栏已满")
+		inventory_message.emit("无法捡起物品：%s" % inventory.rejection_reason(item))
 	else:
 		inventory_message.emit("拾取 %s ×%d" % [item.config.name, accepted])
 	return accepted
 
 func use_inventory_item(index: int, expected_id: int) -> String:
-	var item := inventory.get_item(index)
-	if is_dead:
-		return "角色已死亡"
-	if item == null or item.instance_id != expected_id or item.count <= 0:
-		return "物品已发生变化，请重新选择"
-	if not item.config.useable or item.config.use_effect == null:
-		return "该物品不可使用"
-	if not apply_item_effect(item.config.use_effect):
-		return "当前无法使用（生命值已满或效果无效）"
-	var item_name := item.config.name
-	inventory.consume_one(index, expected_id)
-	return "已使用 %s" % item_name
+	return item_interaction.use_item(inventory.location_at(index), expected_id)
 
 func block_shooting_until_release() -> void:
 	_wait_shoot_release = true

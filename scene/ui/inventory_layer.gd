@@ -30,6 +30,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func close_inventory() -> void:
+	get_viewport().gui_cancel_drag()
 	panel.hide()
 	_player.block_shooting_until_release()
 	if _owns_pause:
@@ -40,7 +41,10 @@ func close_inventory() -> void:
 
 func _process(delta: float) -> void:
 	_notice_time = maxf(_notice_time - delta, 0.0)
-	notice.visible = _notice_time > 0.0 and not panel.visible
+	var prompt := _player.pickup_interactor.get_prompt()
+	if _notice_time <= 0.0:
+		notice.text = prompt
+	notice.visible = (_notice_time > 0.0 or not prompt.is_empty()) and not panel.visible
 
 func _on_inventory_message(message: String) -> void:
 	# 同一条满包提示不逐帧重置时间，UI 不改变背包数据。

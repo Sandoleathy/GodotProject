@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentConfig" format=3 uid="uid://8ehvg5ddqmcl"]
+
+[ext_resource type="Script" uid="uid://dc17ofpitwp2o" path="res://resources/config/equipment_config.gd" id="1_64fiq"]
+[ext_resource type="Texture2D" uid="uid://55wqbux0fo8b" path="res://resources/atlas/belt_test_icon.tres" id="1_80xqu"]
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="2_80xqu"]
+
+[resource]
+script = ExtResource("1_64fiq")
+equipment_slot = 6
+name = "belt test"
+item_type = 3
+label = "test equipment"
+description = "测试腰带"
+icon_texture = ExtResource("1_80xqu")
+weight = 0.201
+rarity = 0.6
+max_duration = null
+slot_capacity = 2
+metadata/_custom_type_script = "uid://dc17ofpitwp2o"
