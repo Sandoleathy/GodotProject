@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemConfig" format=3 uid="uid://ck65p7wuooiug"]
+
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="1_hqxli"]
+[ext_resource type="Texture2D" uid="uid://dix4st6ejgj3b" path="res://resources/atlas/loot_test_icon.tres" id="1_iuc80"]
+
+[resource]
+script = ExtResource("1_hqxli")
+name = "Paper"
+label = "loot"
+description = "战利品测试"
+icon_texture = ExtResource("1_iuc80")
+max_stack = 64
+weight = 0.501
+rarity = 0.2
+max_duration = null
+metadata/_custom_type_script = "uid://dpvwceo5trwa0"

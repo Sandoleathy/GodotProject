@@ -8,7 +8,7 @@
 - **引擎**：Godot 4.7，`gl_compatibility` 渲染（Windows 下 `d3d12` 驱动），`canvas_items` 拉伸模式。
 - **语言**：GDScript（tab 缩进、带类型标注）；一个 `canvas_item` 着色器 `scene/blink.gdshader`。
 - **规模**：11 个 `.gd`、9 个 `.tscn`、全部数值/资源走 `.tres` 配置。
-- **无自动化测试、无构建脚本、无 CI**。所有验证靠 Godot 编辑器实际运行。
+- **无构建脚本、无 CI**。物品回归检查：`Godot --headless --path . --script res://tests/item_system_test.gd`；玩法仍需编辑器手动验证。
 
 ## 2. 运行与验证
 
@@ -16,7 +16,7 @@
 
 1. 用 **Godot 4.7** 打开 `project.godot`，F5 运行。
 2. 手动走一遍链路：主菜单 → 选关菜单 → `scene/game.tscn`；改玩法时至少打完一局（60 秒倒计时或血量归零，两者都会弹结算框）。
-3. `scene/game_test.tscn` 是未纳入版本管理的实验场景（第 2 关入口指向它），只在测刷怪点行为时用得着。
+3. `scene/game_test.tscn` 是第 2 关入口的实验场景；`Game.test_mode = true`，无倒计时/HUD结算，供刷怪点及物品拾取测试。出生点下方有药品×3、武器×1、战利品×5，F6直接运行。
 4. 导出：编辑器 `项目 > 导出 > Windows Desktop`，产物在 `release/`。
 
 Godot 可执行文件当前**不在 PATH** 中
@@ -48,7 +48,7 @@ Godot 可执行文件当前**不在 PATH** 中
 main_menu.tscn (MainMenu)
   └─ 开始游戏 → game_selection_menu.tscn (GameSelectionMenu)
                   ├─ 第 1 关 → game.tscn   (Game)
-                  └─ 第 2 关 → game_test.tscn（实验场景，未跟踪）
+                  └─ 第 2 关 → game_test.tscn（物品与刷怪实验场景）
 game.tscn 结算框「返回主菜单」→ main_menu.tscn
 ```
 
@@ -62,6 +62,17 @@ game.tscn 结算框「返回主菜单」→ main_menu.tscn
 - **`PickUp`（`scene/pickup.gd`）**：`config` 由 `Enemy` 掉落时写入；碰 Player 时调用 `player.apply_pickup(config)`，成功才销毁；到期前用 blink 着色器闪烁。
 - **`ContinueHealingUnit`（`resources/scripts/continue_healing_unit.gd`）**：Player 子节点，把总回复量按时间均摊，结束时补足取整误差。
 - **`MainMenu` / `GameSelectionMenu`**：`change_scene_to_file` 跳转；`SettingButton` 目前**没有**处理函数。
+
+### 单局物品系统
+
+- `resources/scripts/items/item_instance.gd`：`RefCounted` 运行时物品，独立数量/耐久/实例ID，配置只读。
+- `resources/scripts/items/inventory.gd`：Player 子节点，默认20格，先堆叠后空格；`try_add()` 返回实际接收数量，`consume_one()` 校验实例ID，`changed` 刷新UI。
+- `resources/scripts/items/equipment.gd`：八个装备槽的数据查询，首版仅展示，未接穿脱/扩容/防护。
+- `scene/world_item.tscn` / `scene/world_item.gd`：新地面物品，配置为 ItemConfig；碰触入包、部分拾取保留余量、无自动销毁。与旧 PickUp 的即时效果链路并存。
+- `scene/ui/inventory_layer.tscn` / `.gd`：由 Game 创建，绑定同级 Player；TAB 切换并暂停战局，Esc 关闭，结算暂停不能打开。
+- `scene/ui/inventory_panel.tscn` / `.gd`、`scene/ui/item_slot.tscn` / `.gd`：左装备右背包，详情/重量/使用。使用请求走 `Player.use_inventory_item()`，成功后消耗1个；满血和无效使用不消耗。
+- 现有 `max_duration` 配置允许 null，实例按无耐久0处理；默认最大堆叠为1。ItemConfig.id 是预留稳定标识，当前堆叠按配置引用/资源路径及耐久匹配。
+- 本系统玩家可见文案随对应 UI/Player 脚本维护。无 Autoload、存档、负重惩罚、容器嵌套。
 
 ### 数据驱动链路
 
@@ -111,7 +122,7 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 | 7 | Explosion | Enemy `ExplosionDamageArea`（layer 64，mask 6 = Player+EnemyBody） |
 | 8 | SpawnerDetect | EnemySpawner `DetectRange`（layer 128，mask 2） |
 
-输入动作：`move_left/right/up/down`（WASD）、`shoot_left/right/up/down`（方向键/手柄轴）、`shooting`（鼠标左键 / 手柄按钮）、`pause`（Esc，脚本里尚未接）。新增输入请写进 `project.godot` 的 `[input]`，不要在脚本里读裸键码。
+输入动作：`move_left/right/up/down`（WASD）、`shoot_left/right/up/down`（方向键/手柄轴）、`shooting`（鼠标左键 / 手柄按钮）、`toggle_inventory`（TAB，装备/背包）、`pause`（Esc，关闭背包）。新增输入请写进 `project.godot` 的 `[input]`，不要在脚本里读裸键码。
 
 ## 7. 代码约定
 
@@ -135,7 +146,7 @@ EnemyConfig(.tres) ──► EnemySpawner.enemy_configs ──信号──► Ga
 
 **功能未完成**
 
-- `pause` 输入动作已定义但没有任何脚本消费。
+- `pause` 目前仅用于关闭物品面板，未提供独立暂停菜单。
 - 选关菜单的"设置"按钮无处理函数（还未开发）；
 
 

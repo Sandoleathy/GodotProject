@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemConfig" format=3 uid="uid://bcc7ti2pn8l1x"]
+
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="1_ly6km"]
+[ext_resource type="Texture2D" uid="uid://bcm00kfoib3k4" path="res://resources/texture/weapon_icon.png" id="1_t0qox"]
+
+[resource]
+script = ExtResource("1_ly6km")
+name = "test weapon"
+item_type = 2
+label = "test_weapon"
+description = "测试武器"
+icon_texture = ExtResource("1_t0qox")
+weight = 1.301
+rarity = 1.0
+max_duration = 200.0
+metadata/_custom_type_script = "uid://dpvwceo5trwa0"

@@ -4,6 +4,7 @@ class_name EquipmentConfig
 enum EquipmentSlot{
 	HEAD,
 	CHEST,
+	CHEST_HARNESS,
 	BAG,
 	HEAD_SET,
 	FACE,

@@ -10,6 +10,7 @@ enum ItemType {
 }
 
 @export_group("名称类型外观")
+@export var id: StringName
 @export var name: String
 @export var item_type: ItemType
 @export var label: String
@@ -17,7 +18,7 @@ enum ItemType {
 @export var icon_texture: Texture2D # 图标
 
 @export_group("数值")
-@export_range(1, 10, 1, "or_greater") var max_stack: int # 物品最大堆叠数量
+@export_range(1, 10, 1, "or_greater") var max_stack: int = 1 # 物品最大堆叠数量
 @export var useable: bool
 @export var use_effect: EffectConfig # 指向 effect_config
 @export_range(0.001, 100.0, 0.1, "or_greater") var weight: float # 物品重量

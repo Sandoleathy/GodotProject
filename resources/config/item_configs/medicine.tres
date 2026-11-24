@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemConfig" format=3 uid="uid://v73q8jpfrmqm"]
+
+[ext_resource type="Script" uid="uid://dpvwceo5trwa0" path="res://resources/config/item_config.gd" id="1_1e1mm"]
+[ext_resource type="Texture2D" uid="uid://t70cli6hudww" path="res://resources/atlas/pickup_continue_healing.tres" id="1_qre31"]
+[ext_resource type="Resource" uid="uid://dxisn5u5eatdv" path="res://resources/config/effect_configs/effect_continue_healing.tres" id="3_h6f84"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_1e1mm")
+name = "MedicineA"
+item_type = 1
+label = "MedicineA"
+description = "药物1"
+icon_texture = ExtResource("1_qre31")
+max_stack = 10
+useable = true
+use_effect = ExtResource("3_h6f84")
+rarity = 1.2
+max_duration = null
+metadata/_custom_type_script = "uid://dpvwceo5trwa0"

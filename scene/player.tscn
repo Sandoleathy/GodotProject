@@ -9,6 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://dc4xvi5yhj331" path="res://resources/audio/cowboy_powerup.wav" id="7_2fvbb"]
 [ext_resource type="Script" uid="uid://dt1wuo7klbmmn" path="res://resources/scripts/continue_healing_unit.gd" id="8_g2vtq"]
 
+[ext_resource type="Script" path="res://resources/scripts/items/inventory.gd" id="9_inventory"]
+[ext_resource type="Script" path="res://resources/scripts/items/equipment.gd" id="10_equipment"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xwcet"]
 resource_local_to_scene = true
 shader = ExtResource("2_s4jxa")
@@ -386,6 +389,12 @@ radius = 6.0
 [node name="Player" type="CharacterBody2D" unique_id=1715718104]
 collision_layer = 2
 script = ExtResource("1_fvtld")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("9_inventory")
+
+[node name="Equipment" type="Node" parent="."]
+script = ExtResource("10_equipment")
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=795580180]
 material = SubResource("ShaderMaterial_xwcet")

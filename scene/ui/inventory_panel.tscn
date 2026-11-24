@@ -1,0 +1,290 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scene/ui/inventory_panel.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scene/ui/item_slot.tscn" id="2_slot"]
+[ext_resource type="FontFile" path="res://resources/font/IPix.ttf" id="3_font"]
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 18.0
+content_margin_bottom = 14.0
+bg_color = Color(0.045, 0.065, 0.085, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.47, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_section"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.065, 0.085, 0.105, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[sub_resource type="Theme" id="Theme_inventory"]
+default_font = ExtResource("3_font")
+default_font_size = 18
+Label/colors/font_color = Color(0.86, 0.91, 0.91, 1)
+Button/font_sizes/font_size = 18
+
+[node name="InventoryPanel" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_inventory")
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.01, 0.02, 0.025, 0.8)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Layout" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Margin/Panel/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Margin/Panel/Layout/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 28
+text = "装备与背包"
+
+[node name="CloseButton" type="Button" parent="Margin/Panel/Layout/Header"]
+custom_minimum_size = Vector2(84, 36)
+layout_mode = 2
+text = "关闭"
+
+[node name="Divider" type="HSeparator" parent="Margin/Panel/Layout"]
+layout_mode = 2
+
+[node name="BodyScroll" type="ScrollContainer" parent="Margin/Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Columns" type="HBoxContainer" parent="Margin/Panel/Layout/BodyScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="EquipmentSection" type="PanelContainer" parent="Margin/Panel/Layout/BodyScroll/Columns"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Style_section")
+
+[node name="EquipmentLayout" type="VBoxContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="EquipmentTitle" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "装备"
+
+[node name="EquipmentHint" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "仅展示当前装备"
+
+[node name="EquipmentGrid" type="GridContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Head" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Chest" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="ChestHarness" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Bag" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="HeadSet" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Face" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Waist" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="SafeBox" parent="Margin/Panel/Layout/BodyScroll/Columns/EquipmentSection/EquipmentLayout/EquipmentGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="InventorySection" type="VBoxContainer" parent="Margin/Panel/Layout/BodyScroll/Columns"]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="InventoryTitle" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "背包"
+
+[node name="CapacityLabel" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "背包未绑定"
+
+[node name="InventoryGrid" type="GridContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 5
+
+[node name="Slot01" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot02" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot03" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot04" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot05" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot06" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot07" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot08" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot09" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot10" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot11" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot12" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot13" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot14" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot15" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot16" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot17" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot18" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot19" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="Slot20" parent="Margin/Panel/Layout/BodyScroll/Columns/InventorySection/InventoryGrid" instance=ExtResource("2_slot")]
+layout_mode = 2
+
+[node name="DetailPanel" type="PanelContainer" parent="Margin/Panel/Layout/BodyScroll/Columns"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Style_section")
+
+[node name="DetailLayout" type="VBoxContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DetailName" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel/DetailLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 22
+text = "物品详情"
+autowrap_mode = 3
+
+[node name="DetailScroll" type="ScrollContainer" parent="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel/DetailLayout"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DetailText" type="Label" parent="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel/DetailLayout/DetailScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "选择背包或装备槽，查看物品信息。"
+autowrap_mode = 3
+
+[node name="UseButton" type="Button" parent="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel/DetailLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+disabled = true
+text = "使用物品"
+
+[node name="MessageLabel" type="Label" parent="Margin/Panel/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.77, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "请选择物品查看详情。"
+autowrap_mode = 3
+
+[connection signal="pressed" from="Margin/Panel/Layout/Header/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="Margin/Panel/Layout/BodyScroll/Columns/DetailPanel/DetailLayout/UseButton" to="." method="_on_use_button_pressed"]

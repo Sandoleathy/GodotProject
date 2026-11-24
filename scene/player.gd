@@ -19,6 +19,12 @@ const SPIRAL_PHASE_STEP := PI / 12
 const BLINK_ENABLED_SHADER_PARAMETER := &"blink_enable"
 const WORLD_COLLISION_MASK := 1
 
+signal inventory_message(message: String)
+
+@onready var inventory: Inventory = $Inventory
+@onready var equipment: Equipment = $Equipment
+var _wait_shoot_release: bool = false
+
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
 @onready var shooting_timer: Timer = $ShootingTimer
 @onready var armed_effect_sprite: AnimatedSprite2D = $ArmedEffectSprite
@@ -80,6 +86,9 @@ func _physics_process(delta: float) -> void:
 	var aim_input := _get_aim_direction()
 	# 接收是否射击
 	var is_shooting := Input.is_action_pressed("shooting")
+	if _wait_shoot_release:
+		_wait_shoot_release = is_shooting
+		is_shooting = false
 	
 	var is_moving := move_input != Vector2.ZERO
 	
@@ -140,9 +149,39 @@ func _try_shoot(shoot_input: Vector2) -> void:
 		_play_sfx(shoot_sfx_player)
 	shooting_timer.start(_get_effective_fire_interval())
 
-# 处理pickup
+func try_pickup_item(item: ItemInstance) -> int:
+	if is_dead:
+		return 0
+	var accepted := inventory.try_add(item)
+	if accepted == 0:
+		inventory_message.emit("物品栏已满")
+	else:
+		inventory_message.emit("拾取 %s ×%d" % [item.config.name, accepted])
+	return accepted
+
+func use_inventory_item(index: int, expected_id: int) -> String:
+	var item := inventory.get_item(index)
+	if is_dead:
+		return "角色已死亡"
+	if item == null or item.instance_id != expected_id or item.count <= 0:
+		return "物品已发生变化，请重新选择"
+	if not item.config.useable or item.config.use_effect == null:
+		return "该物品不可使用"
+	if not apply_item_effect(item.config.use_effect):
+		return "当前无法使用（生命值已满或效果无效）"
+	var item_name := item.config.name
+	inventory.consume_one(index, expected_id)
+	return "已使用 %s" % item_name
+
+func block_shooting_until_release() -> void:
+	_wait_shoot_release = true
+
+# 兼容原有的立即生效掉落物。
 func apply_pickup(config: EffectConfig) -> bool:
-	if config == null:
+	return apply_item_effect(config)
+
+func apply_item_effect(config: EffectConfig) -> bool:
+	if config == null or is_dead:
 		return false
 	var applied:= false
 	var should_refresh_shooting_timer := false
@@ -178,14 +217,14 @@ func apply_pickup(config: EffectConfig) -> bool:
 		should_refresh_shooting_timer = true
 		applied = true
 	
-	if config.healing_amount >= 0:
+	if config.healing_amount > 0 and current_health < max_health:
 		if config.pickup_type == EffectConfig.PickupType.IMMEDIATE_HEALING:
-			apply_healing(config.healing_amount)
-			applied = true
-		if config.pickup_type == EffectConfig.PickupType.CONTINUE_HEALING:
-			# TODO 恢复器启动
-			continue_healing_unit.set_healing_data(config.healing_amount, config.duration)
-			applied = true
+			applied = apply_healing(config.healing_amount) or applied
+		if config.pickup_type == EffectConfig.PickupType.CONTINUE_HEALING and config.duration > 0.0:
+			var remaining_healing: int = continue_healing_unit.total_heal_amount - continue_healing_unit.applied
+			if not continue_healing_unit.is_healing or remaining_healing < config.healing_amount:
+				continue_healing_unit.set_healing_data(config.healing_amount, config.duration)
+				applied = true
 	
 	if should_refresh_shooting_timer:
 		_refresh_shooting_timer_wait_time()

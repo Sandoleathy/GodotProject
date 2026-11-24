@@ -7,6 +7,8 @@ const RESULT_MESSAGE_WIN := "你坚持到了倒计时结束"
 const RESULT_MESSAGE_LOSE := "生命值归零"
 const RESULT_OK_BUTTON_TEXT := "返回主菜单"
 
+@export var test_mode: bool = false
+
 @export_group("关卡UI")
 @export_range(1.0, 3600.0, 1.0, "or_greater") var stage_duration: float = 60.0
 
@@ -19,13 +21,13 @@ const RESULT_OK_BUTTON_TEXT := "返回主菜单"
 @onready var enemy_spawn_points_root: Node2D = $EnemyManager/EnemySpawnPoints
 @onready var enemy_spawn_timer: Timer = $EnemyManager/EnemySpawnTimer
 
-@onready var life_count_label :Label = $HUDLayer/LifeCountLabel
-@onready var time_bar: Sprite2D = $HUDLayer/TimeBar
-@onready var result_dialog: AcceptDialog = $HUDLayer/AcceptDialog
+@onready var life_count_label: Label = get_node_or_null("HUDLayer/LifeCountLabel")
+@onready var time_bar: Sprite2D = get_node_or_null("HUDLayer/TimeBar")
+@onready var result_dialog: AcceptDialog = get_node_or_null("HUDLayer/AcceptDialog")
 
-@onready var bgm_player: AudioStreamPlayer = $AudioContainer/BGMPlayer
-@onready var result_win_sfx_player: AudioStreamPlayer = $AudioContainer/ResultWinSfxPlayer
-@onready var result_lose_sfx_player: AudioStreamPlayer = $AudioContainer/ResultLoseSfxPlayer
+@onready var bgm_player: AudioStreamPlayer = get_node_or_null("AudioContainer/BGMPlayer")
+@onready var result_win_sfx_player: AudioStreamPlayer = get_node_or_null("AudioContainer/ResultWinSfxPlayer")
+@onready var result_lose_sfx_player: AudioStreamPlayer = get_node_or_null("AudioContainer/ResultLoseSfxPlayer")
 @onready var enemy_manager: EnemyManager = $EnemyManager
 
 var random_generator: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -39,12 +41,15 @@ var enemy_spawners: Array[EnemySpawner] = []
 
 func _ready() -> void:
 	random_generator.randomize()
-	
+	var inventory_layer := preload("res://scene/ui/inventory_layer.tscn").instantiate()
+	add_child(inventory_layer)
+	if test_mode:
+		return
 	_configure_result_dialog()
 	_setup_hud()
 	
 func _process(delta: float) -> void:
-	if is_result_displayed:
+	if is_result_displayed or test_mode:
 		return
 	
 	_update_stage_timer(delta)
